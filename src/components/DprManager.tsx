@@ -6,7 +6,7 @@ export default function DprManager() {
   return (
     <PerformanceMonitor
       onDecline={() => setDpr(1)}
-      onIncline={() => setDpr(window.devicePixelRatio > 1 ? 1.5 : 1)}
+      onIncline={() => setDpr(window.devicePixelRatio > 1 ? 2 : 1)}
     />
   )
 }
