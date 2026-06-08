@@ -1,7 +1,17 @@
+import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
-
-export function RenderMetrics({ onUpdate }) {
+export interface RenderMetricsProps {
+  onUpdate: (metrics: {
+    drawCalls: number
+    triangles: number
+    geometries: number
+    textures: number
+    shaders: number
+    vertices: number
+  }) => void
+}
+export function RenderMetrics({ onUpdate }: RenderMetricsProps) {
   const { gl, scene } = useThree()
   const lastUpdate = useRef(0)
 
@@ -11,7 +21,7 @@ export function RenderMetrics({ onUpdate }) {
 
     let vertices = 0
     scene.traverse((obj) => {
-      if (obj.isMesh) vertices += obj.geometry.attributes.position.count
+      if (obj instanceof THREE.Mesh) vertices += obj.geometry.attributes.position.count
     })
 
     onUpdate({
