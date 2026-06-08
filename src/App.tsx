@@ -4,15 +4,28 @@ import DprManager from './components/DprManager'
 import { Suspense, useState } from 'react'
 import { RenderMetrics } from './components/RenderMetrics'
 
-function Model() {
+import CompoundDomeCollider from './components/CompounDomeCollider'
+
+/*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
-}
+}*/
+/*function ModelRef() {
+  const gltf = useGLTF('/modelos/ref-walldome.glb')
+  return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
+}*/
 function App() {
-  const [metrics, setMetrics] = useState({})
+  const [metrics, setMetrics] = useState<{
+    drawCalls?: number
+    triangles?: number
+    geometries?: number
+    textures?: number
+    shaders?: number
+    vertices?: number
+  }>({})
   return (
     <main className="grid h-screen overflow-hidden" style={{ gridTemplateRows: 'auto 1fr' }}>
-      <header className="bg-bacgr">
+      <header>
         <h1>Utis toss game</h1>
 
         <div
@@ -50,12 +63,16 @@ function App() {
           <Stats showPanel={0} />
           <Stats showPanel={2} className="stats-memory" />
           <DprManager />
-          <Environment preset="warehouse" background resolution={256} environmentIntensity={0.6} />
+          <Environment preset="warehouse" resolution={256} environmentIntensity={0.6} />
           <ambientLight intensity={0.3} />
           <Suspense fallback={null}>
-            <Stage adjustCamera={true} intensity={0.5} shadows="contact" environment={null}>
-              <Model />
-            </Stage>
+            <CompoundDomeCollider />
+            <Stage
+              adjustCamera={false}
+              intensity={0.5}
+              shadows="contact"
+              environment={null}
+            ></Stage>
           </Suspense>
           <OrbitControls enableDamping />
         </Canvas>
