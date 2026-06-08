@@ -1,6 +1,11 @@
 import * as THREE from 'three'
-export function generateWallData(wallsGeometry) {
-  const data = []
+type returnType = Array<{
+  args: [number, number, number]
+  position: [number, number, number]
+  rotation: [number, number, number]
+}>
+export function generateWallData(wallsGeometry: THREE.BufferGeometry): returnType {
+  const data: returnType = []
 
   const nonIndexed = wallsGeometry.index ? wallsGeometry.toNonIndexed() : wallsGeometry.clone()
   const positions = nonIndexed.attributes.position
@@ -95,17 +100,17 @@ export function generateWallData(wallsGeometry) {
         parseFloat(offsetPosition.x.toFixed(4)),
         parseFloat(offsetPosition.y.toFixed(4)),
         parseFloat(offsetPosition.z.toFixed(4)),
-      ],
+      ] as [number, number, number],
       rotation: [
         parseFloat(euler.x.toFixed(4)),
         parseFloat(euler.y.toFixed(4)),
         parseFloat(euler.z.toFixed(4)),
-      ],
+      ] as [number, number, number],
       args: [
         parseFloat((width / 2).toFixed(4)),
         parseFloat((height / 2).toFixed(4)),
         parseFloat((depth / 2).toFixed(4)),
-      ],
+      ] as [number, number, number],
     })
   }
 
