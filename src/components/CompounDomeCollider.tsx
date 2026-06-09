@@ -8,17 +8,21 @@ import {
   type RapierRigidBody,
 } from '@react-three/rapier'
 import { useMemo, useRef } from 'react'
-import { ARROW_DATA, DOME_WALL_DATA } from '../store/model-data'
+import { DOME_WALL_DATA } from '../store/model-data'
 import { generateWallData } from '../utils/generate-wall-data'
 import CompundArrowCollider from './colliders/CompundArrowCollider'
 import CompoundWings from './CompundWings'
 
+export type WallDataType = Array<{
+  args: [number, number, number]
+  position: [number, number, number]
+  rotation: [number, number, number]
+}>
 export default function CompoundDomeCollider() {
   const WALLS_MESH_NAME = 'walls_collider'
   const DOME_MESH_NAME = 'dome_collider'
 
   const { nodes } = useGLTF('/modelos/ref-colliders.glb')
-  const { nodes: arrowNodes } = useGLTF('/modelos/borrarrow.glb')
   //-----------------------------------------------------------------------------
   const { nodes: horseNodes } = useGLTF('/modelos/ConvexMesh.glb')
   useMemo(() => {
@@ -37,13 +41,7 @@ export default function CompoundDomeCollider() {
   }, [horseNodes.fixed])
   //-----------------------------------------------------------------------------
   const rigidBodyRef = useRef<RapierRigidBody>(null)
-  const wallData = useRef<
-    Array<{
-      args: [number, number, number]
-      position: [number, number, number]
-      rotation: [number, number, number]
-    }>
-  >([])
+  const wallData = useRef<WallDataType>([])
 
   const getWallData = () => {
     if (DOME_WALL_DATA.length > 0) {
@@ -67,40 +65,33 @@ export default function CompoundDomeCollider() {
     <Physics debug={true}>
       <RigidBody ref={rigidBodyRef} type="fixed" colliders={false}>
         {/**
+        <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
+          <meshStandardMaterial color="black" side={THREE.DoubleSide} />
+        </mesh>
 
-          <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
-            <meshStandardMaterial color="black" side={THREE.DoubleSide} />
-          </mesh>
-          <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
+        <mesh geometry={(nodes[WALLS_MESH_NAME] as THREE.Mesh).geometry}>
+          <meshStandardMaterial color="red" side={THREE.DoubleSide} />
+        </mesh>
 
-          <mesh geometry={(nodes[WALLS_MESH_NAME] as THREE.Mesh).geometry}>
-            <meshStandardMaterial color="red" side={THREE.DoubleSide} />
-          </mesh>
-          {wallData.current.map((face, i) => (
-            <CuboidCollider
-              key={i}
-              args={face.args}
-              position={face.position}
-              rotation={face.rotation}
-            />
-          ))}
-           */}
-        {Object.values(arrowNodes)
-          .filter((node) => node instanceof THREE.Mesh)
-          .map((node) => (
-            <mesh key={node.name} geometry={(node as THREE.Mesh).geometry}>
-              <meshStandardMaterial color="black" side={THREE.DoubleSide} />
-            </mesh>
-          ))}
+        */}
+        <CompoundWings />
+        <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
+        {wallData.current.map((face, i) => (
+          <CuboidCollider
+            key={i}
+            args={face.args}
+            position={face.position}
+            rotation={face.rotation}
+          />
+        ))}
       </RigidBody>
+      <CompundArrowCollider />
       <RigidBody colliders="hull" type="kinematicPosition">
         <primitive object={horseNodes.kinematic} />
       </RigidBody>
       <RigidBody type="fixed" colliders="hull">
         <primitive object={horseNodes.fixed} />
       </RigidBody>
-      <CompundArrowCollider />
-      <CompoundWings />
     </Physics>
   )
 }
