@@ -1,50 +1,55 @@
 import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
-import { CuboidCollider, Physics, RapierRigidBody, RigidBody } from '@react-three/rapier'
+import { CuboidCollider } from '@react-three/rapier'
 import { useRef } from 'react'
-import { WINGs_WALL_DATA } from '../store/model-data'
+import { WINGS_WALL_DATA } from '../store/model-data'
 import { generateWallData } from '../utils/generate-wall-data'
-
+export type WingsWallData = {
+  left: Array<{
+    args: [number, number, number]
+    position: [number, number, number]
+    rotation: [number, number, number]
+  }>
+  right: Array<{
+    args: [number, number, number]
+    position: [number, number, number]
+    rotation: [number, number, number]
+  }>
+}
 export default function CompoundWings() {
   const { nodes } = useGLTF('/modelos/ConvexMesh.glb')
-
-  const rigidBodyRef = useRef<RapierRigidBody>(null)
-  const wingData = useRef<
-    Array<{
-      args: [number, number, number]
-      position: [number, number, number]
-      rotation: [number, number, number]
-    }>
-  >([])
+  const wingData = useRef<WingsWallData>({ left: [], right: [] })
 
   const getWallData = () => {
-    if (WINGs_WALL_DATA.length > 0) {
-      wingData.current = WINGs_WALL_DATA
+    if (WINGS_WALL_DATA.left.length > 0 || WINGS_WALL_DATA.right.length > 0) {
+      wingData.current.left = WINGS_WALL_DATA.left
+      wingData.current.right = WINGS_WALL_DATA.right
       return
     }
     const wingsGeometry = (nodes.a1 as THREE.Mesh).geometry
-    console.warn({ nodes: nodes.a1 })
-    wingData.current = generateWallData(wingsGeometry)
+    //console.log({ nodes: nodes.b2 })
+    wingData.current.left = generateWallData(wingsGeometry)
   }
   getWallData()
 
   return (
-    <Physics debug={true}>
-      <RigidBody ref={rigidBodyRef} type="fixed" colliders={false}>
-        {
-          <mesh geometry={(nodes.a1 as THREE.Mesh).geometry}>
-            <meshStandardMaterial color="red" side={THREE.DoubleSide} />
-          </mesh>
-        }
-        {wingData.current.map((face, i) => (
-          <CuboidCollider
-            key={i}
-            args={face.args}
-            position={face.position}
-            rotation={face.rotation}
-          />
-        ))}
-      </RigidBody>
-    </Physics>
+    <>
+      {wingData.current.left.map((face, i) => (
+        <CuboidCollider
+          key={i}
+          args={face.args}
+          position={face.position}
+          rotation={face.rotation}
+        />
+      ))}
+      {wingData.current.right.map((face, i) => (
+        <CuboidCollider
+          key={i}
+          args={face.args}
+          position={face.position}
+          rotation={face.rotation}
+        />
+      ))}
+    </>
   )
 }
