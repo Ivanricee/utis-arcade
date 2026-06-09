@@ -114,9 +114,10 @@ export function generateWallData(wallsGeometry: THREE.BufferGeometry): returnTyp
     })
   }
 
-  /*console.log('=== DOME WALL DATA - copia y pega en domeWallData.js ===')
-  console.log(JSON.stringify(data, null, 2))
-  console.log('=== FIN DATA ===')*/
+  /*console.warn('=== DOME WALL DATA - copia y pega en domeWallData.js ===')
+  console.warn(JSON.stringify(data, null, 2))
+  console.log({ datacount7: data.length })
+  console.warn('=== FIN DATA ===')*/
 
   return data
 }
