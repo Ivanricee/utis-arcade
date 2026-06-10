@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
 import { CuboidCollider } from '@react-three/rapier'
 import { useRef } from 'react'
-import { WINGS_WALL_DATA } from '../store/model-data'
-import { generateWallData } from '../utils/generate-wall-data'
+import { WINGS_WALL_DATA } from '../../store/model-data'
+import { generateWallData } from '../../utils/generate-wall-data'
 export type WingsWallData = {
   left: Array<{
     args: [number, number, number]

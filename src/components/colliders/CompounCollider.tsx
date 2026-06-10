@@ -8,38 +8,24 @@ import {
   type RapierRigidBody,
 } from '@react-three/rapier'
 import { useMemo, useRef } from 'react'
-import { DOME_WALL_DATA } from '../store/model-data'
-import { generateWallData } from '../utils/generate-wall-data'
-import CompundArrowCollider from './colliders/CompundArrowCollider'
+import { DOME_WALL_DATA } from '../../store/model-data'
+import { generateWallData } from '../../utils/generate-wall-data'
+import CompundArrowCollider from './CompundArrowCollider'
 import CompoundWings from './CompundWings'
+import CompoundHorseCollider from './CompoundHorseCollider'
+import { CompoundFloatingCollider } from './CompundFloatingCollider'
 
 export type WallDataType = Array<{
   args: [number, number, number]
   position: [number, number, number]
   rotation: [number, number, number]
 }>
-export default function CompoundDomeCollider() {
+export default function CompoundCollider() {
   const WALLS_MESH_NAME = 'walls_collider'
   const DOME_MESH_NAME = 'dome_collider'
 
   const { nodes } = useGLTF('/modelos/ref-colliders.glb')
-  //-----------------------------------------------------------------------------
-  const { nodes: horseNodes } = useGLTF('/modelos/ConvexMesh.glb')
-  useMemo(() => {
-    if (horseNodes.fixed) {
-      horseNodes.convex.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          const material = child.material
-          if (Array.isArray(material)) {
-            material.forEach((m) => (m.visible = false))
-          } else {
-            material.visible = false
-          }
-        }
-      })
-    }
-  }, [horseNodes.fixed])
-  //-----------------------------------------------------------------------------
+
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const wallData = useRef<WallDataType>([])
 
@@ -73,9 +59,11 @@ export default function CompoundDomeCollider() {
           <meshStandardMaterial color="red" side={THREE.DoubleSide} />
         </mesh>
 
+
         */}
         <CompoundWings />
         <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
+        <CompoundFloatingCollider />
         {wallData.current.map((face, i) => (
           <CuboidCollider
             key={i}
@@ -86,12 +74,8 @@ export default function CompoundDomeCollider() {
         ))}
       </RigidBody>
       <CompundArrowCollider />
-      <RigidBody colliders="hull" type="kinematicPosition">
-        <primitive object={horseNodes.kinematic} />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="hull">
-        <primitive object={horseNodes.fixed} />
-      </RigidBody>
+
+      <CompoundHorseCollider />
     </Physics>
   )
 }
