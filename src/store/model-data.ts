@@ -1,5 +1,5 @@
-import type { WallDataType } from '../components/CompounDomeCollider'
-import type { WingsWallData } from '../components/CompundWings'
+import type { WallDataType } from '../components/colliders/CompounCollider'
+import type { WingsWallData } from '../components/colliders/CompundWings'
 
 export const ARROW_DATA = {
   punta_1: {
@@ -202,4 +202,21 @@ export const WINGS_WALL_DATA: WingsWallData = {
       args: [0.0833, 0.5662, 0.075],
     },
   ],
+}
+export const FLOATING_DATA = {
+  zepp2: {
+    position: [-0.31, 2.6714868545532227, -0.05],
+    scale: [0.02644851803779602, 0.040183305740356445, 0.05109599232673645],
+    rotation: [0.0, 0.0, 0.0],
+  },
+  zepp1: {
+    position: [-0.31, 2.7653017044067383, -0.05],
+    scale: [0.05393344163894653, 0.058272600173950195, 0.1700471267104149],
+    rotation: [0.0, 0.0, 0.0],
+  },
+  oct: {
+    position: [-0.45832180976867676, 1.9, -0.85],
+    scale: [0.02285972237586975, 0.17232751846313477, 0.12096136808395386],
+    rotation: [0.0, 0.0, 0.0],
+  },
 }
