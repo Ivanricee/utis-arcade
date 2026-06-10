@@ -3,8 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import DprManager from './components/DprManager'
 import { Suspense, useState } from 'react'
 import { RenderMetrics } from './components/RenderMetrics'
-
-import CompoundDomeCollider from './components/CompounDomeCollider'
+import CompoundCollider from './components/colliders/CompounCollider'
 
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
@@ -63,7 +62,7 @@ function App() {
           <Environment preset="warehouse" resolution={256} environmentIntensity={0.6} />
           <ambientLight intensity={0.3} />
           <Suspense fallback={null}>
-            <CompoundDomeCollider />
+            <CompoundCollider />
             <Stage
               adjustCamera={false}
               intensity={0.5}
