@@ -14,6 +14,7 @@ import CompundArrowCollider from './CompundArrowCollider'
 import CompoundWings from './CompundWings'
 import CompoundHorseCollider from './CompoundHorseCollider'
 import { CompoundFloatingCollider } from './CompundFloatingCollider'
+import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 
 export type WallDataType = Array<{
   args: [number, number, number]
@@ -73,8 +74,9 @@ export default function CompoundCollider() {
           />
         ))}
       </RigidBody>
-      <CompundArrowCollider />
+      <CompoundTorusRingCollider sphereCount={9} overlapFactor={0.95} />
 
+      <CompundArrowCollider />
       <CompoundHorseCollider />
     </Physics>
   )
