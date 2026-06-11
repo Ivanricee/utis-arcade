@@ -9,7 +9,7 @@ function ArrowCollider({ position }: ArrowColliderProps) {
   return (
     <RigidBody type="fixed" colliders={false} position={position}>
       {Object.entries(ARROW_DATA).map(([name, c]) => {
-        if (name === 'punta_1' || name === 'punta_2' || name === 'tail_1' || name === 'tail_2') {
+        if (name === 'punta_2' || name === 'tail_1') {
           return (
             <ConeCollider
               key={name}
