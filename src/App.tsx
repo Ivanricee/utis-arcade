@@ -20,8 +20,11 @@ function App() {
     vertices?: number
   }>({})
   return (
-    <main className="grid h-screen overflow-hidden" style={{ gridTemplateRows: 'auto 1fr' }}>
-      <header>
+    <main
+      className="grid h-screen w-screen overflow-hidden"
+      style={{ gridTemplateRows: 'auto 1fr' }}
+    >
+      <header className="flex justify-center">
         <h1>Iron Sea Rings</h1>
 
         <div
