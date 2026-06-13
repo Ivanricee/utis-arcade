@@ -7,14 +7,14 @@ import {
   TrimeshCollider,
   type RapierRigidBody,
 } from '@react-three/rapier'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DOME_WALL_DATA } from '../../store/model-data'
 import { generateWallData } from '../../utils/generate-wall-data'
 import CompundArrowCollider from './CompundArrowCollider'
 import CompoundWings from './CompundWings'
 import CompoundHorseCollider from './CompoundHorseCollider'
 import { CompoundFloatingCollider } from './CompundFloatingCollider'
-import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
+import Rings from './Rings/Rings'
 
 export type WallDataType = Array<{
   args: [number, number, number]
@@ -26,7 +26,8 @@ export default function CompoundCollider() {
   const DOME_MESH_NAME = 'dome_collider'
 
   const { nodes } = useGLTF('/modelos/ref-colliders.glb')
-
+  const [paused, setPaused] = useState(false)
+  const isPaused = useRef(false)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const wallData = useRef<WallDataType>([])
 
@@ -48,8 +49,18 @@ export default function CompoundCollider() {
       indices: geometry.index.array,
     }
   }, [nodes])
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      isPaused.current = document.hidden
+      setPaused(document.hidden)
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [])
+
   return (
-    <Physics debug={true}>
+    <Physics debug={true} gravity={[0, -1.4, 0]} paused={paused}>
       <RigidBody ref={rigidBodyRef} type="fixed" colliders={false}>
         {/**
         <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
@@ -74,10 +85,13 @@ export default function CompoundCollider() {
           />
         ))}
       </RigidBody>
-      <CompoundTorusRingCollider sphereCount={9} overlapFactor={0.95} />
+      {
+        //
+      }
+      <CompoundHorseCollider isPaused={isPaused} />
+      <Rings />
 
       <CompundArrowCollider />
-      <CompoundHorseCollider />
     </Physics>
   )
 }
