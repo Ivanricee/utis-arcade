@@ -1,9 +1,10 @@
 import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
-import { useMemo } from 'react'
-import { BallCollider, RigidBody } from '@react-three/rapier'
+import { useEffect, useMemo, useRef } from 'react'
+import { BallCollider, RapierRigidBody, RigidBody } from '@react-three/rapier'
 
 interface TorusRingColliderProps {
+  position: [number, number, number]
   sphereCount?: number
   /** Overlap entre esferas vecinas. 0.65 = más gap, 0.85 = más overlap */
   overlapFactor?: number
@@ -11,6 +12,7 @@ interface TorusRingColliderProps {
   friction?: number
   color?: string
   showMesh?: boolean
+  onRigidBodyReady?: (rb: RapierRigidBody) => void
 }
 interface SpherePosition {
   x: number
@@ -44,7 +46,6 @@ const extractTorusDimmensions = (geometry: THREE.BufferGeometry) => {
 }
 const generateSpherePositions = (
   torusRadius: number,
-  tubeRadius: number,
   sphereCount: number,
   overlapFactor: number,
   holeAxis: 'x' | 'y' | 'z',
@@ -70,18 +71,17 @@ const generateSpherePositions = (
   })
 }
 export function CompoundTorusRingCollider({
+  position,
   sphereCount = 8,
   overlapFactor = 0.75,
   restitution = 0.2,
   friction = 0.8,
-  /* color = 'royalblue',
-  showMesh = true,*/
+  onRigidBodyReady,
 }: TorusRingColliderProps) {
+  const rigidBodyRef = useRef<RapierRigidBody>(null)
   const { nodes } = useGLTF('/modelos/RING.glb')
-  const position = nodes.ring.position
   const mesh = nodes.ring as THREE.Mesh
   if (!mesh.geometry) {
-    //console.log('no geometry found in mesh')
     return null
   }
   const { tubeRadius, torusRadius, holeAxis, center } = useMemo(
@@ -90,41 +90,33 @@ export function CompoundTorusRingCollider({
   )
 
   const spherePositions = useMemo(
-    () =>
-      generateSpherePositions(
-        torusRadius,
-        tubeRadius,
-        sphereCount,
-        overlapFactor,
-        holeAxis,
-        center
-      ),
+    () => generateSpherePositions(torusRadius, sphereCount, overlapFactor, holeAxis, center),
     [torusRadius, tubeRadius, sphereCount, overlapFactor, holeAxis, center]
   )
-
-  /*useMemo(() => {
-    console.log(`[TorusRingCollider] "ring"`, {
-      torusRadius: torusRadius.toFixed(4),
-      tubeRadius: tubeRadius.toFixed(4),
-      holeAxis,
-      sphereCount,
-      sphereRadius: spherePositions[0]?.radius.toFixed(4),
-    })
-  }, [torusRadius, tubeRadius, holeAxis, sphereCount])*/
+  useEffect(() => {
+    if (!rigidBodyRef.current) return
+    if (rigidBodyRef.current && onRigidBodyReady) onRigidBodyReady(rigidBodyRef.current)
+    const strength = 0.0035
+    rigidBodyRef.current.applyImpulse(
+      {
+        x: (Math.random() - 0.5) * strength,
+        y: (Math.random() - 0.5) * strength * 0.6,
+        z: (Math.random() - 0.5) * strength,
+      },
+      true
+    )
+  }, [])
   return (
     <RigidBody
       ccd
+      ref={rigidBodyRef}
+      linearDamping={3.5}
+      angularDamping={3}
       position={position}
       colliders={false}
       restitution={restitution}
       friction={friction}
     >
-      {/*showMesh && (
-        <mesh geometry={mesh.geometry}>
-          <meshStandardMaterial color={color} />
-        </mesh>
-      )*/}
-
       {spherePositions.map((sphere, i) => (
         <BallCollider key={i} position={[sphere.x, sphere.y, sphere.z]} args={[sphere.radius]} />
       ))}
