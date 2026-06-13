@@ -12,9 +12,14 @@ const WAVE_CONFIG = [
 ]
 const PHASE_STEP = (Math.PI * 2) / 5
 
-export default function CompoundHorseCollider() {
+export default function CompoundHorseCollider({
+  isPaused,
+}: {
+  isPaused: React.RefObject<boolean>
+}) {
   const { nodes: horseNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const waveRefs = useRef<(RapierRigidBody | null)[]>([])
+  const localTime = useRef(0)
 
   useMemo(() => {
     //console.log({ convex1: horseNodes.convex1 })
@@ -39,8 +44,12 @@ export default function CompoundHorseCollider() {
     horseNodes.conex5,
   ]
   const baseLimitY = fixedNodes.map((node) => node.position.y)
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime
+  useFrame((_, delta) => {
+    if (isPaused.current) return
+
+    const safeDelta = Math.min(delta, 1 / 30)
+    localTime.current += safeDelta
+    const time = localTime.current
 
     waveRefs.current.forEach((rb, i) => {
       if (!rb) return
