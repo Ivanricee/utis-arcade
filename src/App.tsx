@@ -4,6 +4,7 @@ import DprManager from './components/DprManager'
 import { Suspense, useState } from 'react'
 import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
+import { ConsoleGame } from './components/ConsoleGame'
 
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
@@ -66,6 +67,15 @@ function App() {
           <ambientLight intensity={0.3} />
           <Suspense fallback={null}>
             <CompoundCollider />
+            <Stage
+              adjustCamera={false}
+              intensity={0.5}
+              shadows="contact"
+              environment={null}
+            ></Stage>
+          </Suspense>
+          <Suspense fallback={null}>
+            <ConsoleGame />
             <Stage
               adjustCamera={false}
               intensity={0.5}
