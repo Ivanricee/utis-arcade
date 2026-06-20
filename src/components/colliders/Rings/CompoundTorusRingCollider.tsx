@@ -1,9 +1,17 @@
 import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
-import { BallCollider, RapierRigidBody, RigidBody } from '@react-three/rapier'
+import {
+  BallCollider,
+  CylinderCollider,
+  interactionGroups,
+  RapierRigidBody,
+  RigidBody,
+} from '@react-three/rapier'
+//import { useGameStore } from '../../../store/gameStore'
 
 interface TorusRingColliderProps {
+  ringIndex: number
   position: [number, number, number]
   sphereCount?: number
   /** Overlap entre esferas vecinas. 0.65 = más gap, 0.85 = más overlap */
@@ -13,6 +21,11 @@ interface TorusRingColliderProps {
   color?: string
   showMesh?: boolean
   onRigidBodyReady?: (rb: RapierRigidBody) => void
+}
+
+interface RigidBodyUserData {
+  ringIndex?: number
+  postIndex?: number
 }
 interface SpherePosition {
   x: number
@@ -42,6 +55,7 @@ const extractTorusDimmensions = (geometry: THREE.BufferGeometry) => {
   const outerRadius = axes[1].value / 2
   const torusRadius = outerRadius - tubeRadius
   const holeAxis = axes[0].axis
+  //console.log({ tubeRadius, torusRadius, holeAxis, center })
   return { tubeRadius, torusRadius, holeAxis, center }
 }
 const generateSpherePositions = (
@@ -71,6 +85,7 @@ const generateSpherePositions = (
   })
 }
 export function CompoundTorusRingCollider({
+  ringIndex,
   position,
   sphereCount = 8,
   overlapFactor = 0.75,
@@ -78,6 +93,7 @@ export function CompoundTorusRingCollider({
   friction = 0.8,
   onRigidBodyReady,
 }: TorusRingColliderProps) {
+  //const setRingInPost = useGameStore((state) => state.setRingInPost)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const { nodes } = useGLTF('/modelos/RING.glb')
   const mesh = nodes.ring as THREE.Mesh
@@ -110,6 +126,7 @@ export function CompoundTorusRingCollider({
     <RigidBody
       ccd
       ref={rigidBodyRef}
+      userData={{ ringIndex }}
       linearDamping={3.5}
       angularDamping={3}
       position={position}
@@ -118,8 +135,32 @@ export function CompoundTorusRingCollider({
       friction={friction}
     >
       {spherePositions.map((sphere, i) => (
-        <BallCollider key={i} position={[sphere.x, sphere.y, sphere.z]} args={[sphere.radius]} />
+        <BallCollider
+          key={i}
+          position={[sphere.x, sphere.y, sphere.z]}
+          args={[sphere.radius]}
+          name={`ringIndex-${ringIndex}-sphere-${i}`}
+        />
       ))}
+      <CylinderCollider
+        sensor
+        args={[0.001, torusRadius - tubeRadius]} //rad, h
+        position={[center.x, center.y, center.z]}
+        collisionGroups={interactionGroups(1, [0])}
+        onIntersectionEnter={({ other }) => {
+          const postIndex = (other.rigidBody?.userData as RigidBodyUserData)?.postIndex
+          if (postIndex === undefined) return
+          //console.log('enter postIndex', postIndex)
+
+          // setRingInPost(ringIndex, postIndex)
+        }}
+        onIntersectionExit={({ other }) => {
+          const postIndex = (other.rigidBody?.userData as RigidBodyUserData)?.postIndex
+          if (postIndex === undefined) return
+          //console.log('exit postIndex', postIndex)
+          // setRingInPost(ringIndex, null)
+        }}
+      />
     </RigidBody>
   )
 }
