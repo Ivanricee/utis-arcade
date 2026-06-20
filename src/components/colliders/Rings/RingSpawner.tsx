@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
+import { useWaterForce } from '../../hooks/useWaterForce'
 
 interface RingSpawnerProps {
   onPositionsReady?: (positions: [number, number, number][]) => void
@@ -47,7 +48,11 @@ function generateStackPositions(
   const stackOffsets = [-(diameter + stackSpacing), 0, diameter + stackSpacing]
   for (const zOffset of stackOffsets) {
     for (let i = 0; i < ringsPerStack; i++) {
-      positions.push([basePosition.x, basePosition.y - i * stackSpacing, basePosition.z + zOffset])
+      positions.push([
+        basePosition.x - 0.3,
+        basePosition.y - i * stackSpacing + 2.71,
+        basePosition.z + zOffset - 0.000645,
+      ])
     }
   }
 
@@ -69,6 +74,7 @@ export function RingSpawner({
   const { nodes } = useGLTF('/modelos/RING.glb')
   const rigidBodyRefs = useRef<RapierRigidBody[]>([] as RapierRigidBody[])
   const mesh = nodes.ring as THREE.Mesh | undefined
+  useWaterForce(rigidBodyRefs)
 
   //  base y diámetro from mesh
   const { basePosition, diameter } = useMemo(() => {
@@ -130,7 +136,8 @@ export function RingSpawner({
       {allPositions.map((position, i) =>
         visibleRings[i] ? (
           <CompoundTorusRingCollider
-            key={`ring-${resetKey}-${i}`} // resetKey en key fuerza remount completo
+            ringIndex={i}
+            key={`ring-${resetKey}-${i}`}
             position={position}
             sphereCount={sphereCount}
             overlapFactor={overlapFactor}
