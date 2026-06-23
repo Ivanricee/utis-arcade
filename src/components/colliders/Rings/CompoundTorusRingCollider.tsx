@@ -124,11 +124,13 @@ export function CompoundTorusRingCollider({
   }, [])
   return (
     <RigidBody
+      //type="fixed"
       ccd
+      canSleep={false}
       ref={rigidBodyRef}
       userData={{ ringIndex }}
       linearDamping={3.5}
-      angularDamping={3}
+      angularDamping={2}
       position={position}
       colliders={false}
       restitution={restitution}
