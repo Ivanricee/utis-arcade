@@ -12,7 +12,7 @@ export const WATER_ZONE = {
   centerZ: 0,
   radius: 1, //horizontal radius
   minY: 1, //min height
-  maxY: 2, //max height
+  maxY: 2.5, //max height
   maxStrength: 0.00028,
   decayRate: 1 / 2, // reach to 0 in 1.2s
 }
@@ -53,9 +53,12 @@ export function useWaterForce(rigidBodyRefs: React.RefObject<RapierRigidBody[]>)
       if (!inZone) return
 
       const distanceFalloff = Math.max(0, 1 - horizontalDist / WATER_ZONE.radius)
-      const force = (WATER_ZONE.maxStrength / distanceFalloff) * newPressure
-      const randomX = (Math.random() * 2 - 1) * force * 0.4
-      const randomZ = (Math.random() * 2 - 1) * force * 0.4
+      //reduce force by distance falloff
+      const heighFactor = 1 - (pos.y - WATER_ZONE.minY) / (WATER_ZONE.maxY - WATER_ZONE.minY)
+      const clampedHeighFactor = Math.max(0, Math.min(1, heighFactor))
+      const force = (WATER_ZONE.maxStrength / distanceFalloff) * newPressure * clampedHeighFactor
+      const randomX = (Math.random() * 2 - 1) * force * -1
+      const randomZ = (Math.random() * 2 - 1) * force * 0.5
 
       rigidBody.applyImpulse({ x: randomX, y: force, z: randomZ }, true)
     })
