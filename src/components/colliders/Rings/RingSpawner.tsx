@@ -49,8 +49,8 @@ function generateStackPositions(
   for (const zOffset of stackOffsets) {
     for (let i = 0; i < ringsPerStack; i++) {
       positions.push([
-        basePosition.x - 0.3,
-        basePosition.y - i * stackSpacing + 2.71,
+        basePosition.x - 0.305,
+        basePosition.y - i * stackSpacing + 2.55,
         basePosition.z + zOffset - 0.000645,
       ])
     }
