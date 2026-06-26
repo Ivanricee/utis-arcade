@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
-import { useWaterForce } from '../../hooks/useWaterForce'
+import { useWaterForce } from '../../../hooks/useWaterForce'
 
 interface RingSpawnerProps {
   onPositionsReady?: (positions: [number, number, number][]) => void
@@ -147,6 +147,35 @@ export function RingSpawner({
           />
         ) : null
       )}
+      {/*POLE_CONFIGS.map((config) => (
+        <group key={`debug-pole-${config.id}`}>
+          {// 1. Cilindro Rosa: Muestra dónde está el palo visualmente
+          }
+          <mesh position={config.stickPosition} scale={config.stickScale}>
+            {// Usamos cylinderGeometry básico, la escala lo ajustará a tu forma
+            }
+            <cylinderGeometry args={[0.5, 0.5, 1, 8]} />
+            <meshBasicMaterial color="hotpink" transparent opacity={0.4} wireframe />
+          </mesh>
+
+
+          {
+          // 2. Esfera Amarilla: Muestra EXACTAMENTE dónde calculamos que está la cima (topY)
+          }
+          <mesh position={[config.stickPosition[0], config.topY, config.stickPosition[2]]}>
+            <sphereGeometry args={[0.05]} />
+            <meshBasicMaterial color="yellow" wireframe />
+          </mesh>
+
+          {
+          // Opcional: Círculo en el suelo mostrando el radio de atracción
+          }
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={config.basePosition}>
+            <ringGeometry args={[config.radius - 0.01, config.radius, 32]} />
+            <meshBasicMaterial color="cyan" transparent opacity={0.3} side={2} />
+          </mesh>
+        </group>
+      ))*/}
     </>
   )
 }
