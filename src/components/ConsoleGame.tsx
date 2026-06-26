@@ -1,7 +1,7 @@
 import type { ThreeEvent } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { useGameStore } from '../store/gameStore'
-import { WATER_ZONE } from './hooks/useWaterForce'
+import { WATER_ZONE } from '../hooks/useWaterForce'
 
 export function ConsoleGame() {
   const baseMesh = useGLTF('/modelos/BASE_mesh.glb')
