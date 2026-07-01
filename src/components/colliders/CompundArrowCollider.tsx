@@ -24,6 +24,7 @@ function ArrowCollider({ position, postIndex }: ArrowColliderProps) {
           return (
             <CuboidCollider
               key={name}
+              name="stick"
               args={[c.scale[0], c.scale[1], c.scale[2]]}
               position={[c.position[0], c.position[1], c.position[2]]}
               rotation={[c.rotation[0], c.rotation[1], c.rotation[2]]}
