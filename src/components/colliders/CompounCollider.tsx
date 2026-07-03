@@ -73,7 +73,6 @@ export default function CompoundCollider() {
 
 
         */}
-        <CompoundWings />
         <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
         <CompoundFloatingCollider />
         {wallData.current.map((face, i) => (
@@ -84,13 +83,10 @@ export default function CompoundCollider() {
             rotation={face.rotation}
           />
         ))}
+        <CompoundWings />
       </RigidBody>
-      {
-        //
-      }
-      <CompoundHorseCollider isPaused={isPaused} />
       <Rings />
-
+      <CompoundHorseCollider isPaused={isPaused} />
       <CompundArrowCollider />
     </Physics>
   )
