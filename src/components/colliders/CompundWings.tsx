@@ -27,8 +27,8 @@ export default function CompoundWings() {
       return
     }
     const wingsGeometry = (nodes.a1 as THREE.Mesh).geometry
-    //console.log({ nodes: nodes.b2 })
-    wingData.current.left = generateWallData(wingsGeometry)
+    wingData.current.right = generateWallData(wingsGeometry)
+    //console.log({ wingData: wingData.current })
   }
   getWallData()
 
