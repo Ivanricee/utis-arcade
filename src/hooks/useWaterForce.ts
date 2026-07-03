@@ -13,15 +13,15 @@ export const WATER_ZONE = {
   radius: 1,
   minY: 1,
   maxY: 2.8,
-  maxStrength: 0.0003,
+  maxStrength: 0.0003, //main water pressure
   decayRate: 1 / 2,
 }
 
-const MAGNET_STRENGTH = 0.000024
+const MAGNET_STRENGTH = 0.000006
 const ACTIVATION_HEIGHT_MARGIN = 1
 // assistance impulse strength
 const ROTATION_IMPULSE_STRENGTH = 0.0000018
-const RING_IN_POST_STRENGTH = 0.21
+const RING_IN_POST_STRENGTH = 0.25
 const STICK_POS = ARROW_DATA.stick.position
 const STICK_SCALE = ARROW_DATA.stick.scale
 const getTopY = (baseY: number) => baseY + STICK_SCALE[1]
@@ -165,7 +165,7 @@ export function useWaterForce(rigidBodyRefs: React.RefObject<RapierRigidBody[]>)
       }
 
       // ── LATERAL PULL ────────────────────────────────────────────────────────
-      if (minDist >= 0.15) {
+      if (minDist >= 0.075) {
         const t = 1 - minDist / closestPole.radius
         const smooth = t * t * (3 - 2 * t)
         const pull = MAGNET_STRENGTH * smooth
