@@ -60,7 +60,7 @@ export default function CompoundCollider() {
   }, [])
 
   return (
-    <Physics debug={true} gravity={[0, -1.4, 0]} paused={paused}>
+    <Physics debug={false} gravity={[0, -1.4, 0]} paused={paused}>
       <RigidBody ref={rigidBodyRef} type="fixed" colliders={false}>
         {/**
         <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
