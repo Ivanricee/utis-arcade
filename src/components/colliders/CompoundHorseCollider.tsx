@@ -96,7 +96,9 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       {colliderWaveNodes.map((node, i) => (
         <RigidBody
           key={`collider-${i}`}
-          ref={(el) => (rigidRefs.current[i] = el)}
+          ref={(el) => {
+            rigidRefs.current[i] = el
+          }}
           colliders="hull"
           type="kinematicPosition"
         >
