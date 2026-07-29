@@ -75,7 +75,7 @@ function App() {
             files="/hdri/lighthdri.hdr"
             //resolution={256}
             environmentIntensity={0.5}
-            background
+            //background
             environmentRotation={
               new THREE.Euler(
                 THREE.MathUtils.degToRad(0),
