@@ -18,7 +18,8 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const { nodes: visualNodes } = useGLTF('/modelos/horses.glb')
   const lightMap = useTexture('/modelos/textures/horses/lightmap_horses.png')
-
+  //const lightRef = useRef(null)
+  //useHelper(lightRef, THREE.PointLightHelper, 0.1, 'red') // tamaño, color
   useEffect(() => {
     lightMap.colorSpace = THREE.LinearSRGBColorSpace
     lightMap.flipY = false
@@ -40,7 +41,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
         Array.isArray(original.material) ? original.material[0] : original.material
       ).clone() as THREE.MeshStandardMaterial
       mat.lightMap = lightMap
-      mat.lightMapIntensity = 1.5
+      mat.lightMapIntensity = 2
       mat.normalScale?.set(0.65, 0.65)
       mat.emissiveIntensity = 1
       mat.needsUpdate = true
@@ -93,6 +94,27 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
 
   return (
     <>
+      {
+        <pointLight
+          position={[-0.47, 1.39, 0.3]}
+          intensity={0.8}
+          distance={1}
+          decay={1}
+          color="#09FF00"
+          castShadow={false} // opcional, ya es false por defecto
+        />
+      }
+      {
+        <pointLight
+          // ref={lightRef}
+          position={[0, 1.5, -0.15]}
+          intensity={7}
+          distance={1}
+          decay={0.5}
+          color="#0256FF"
+          castShadow={false} // opcional, ya es false por defecto
+        />
+      }
       {colliderWaveNodes.map((node, i) => (
         <RigidBody
           key={`collider-${i}`}
@@ -105,11 +127,9 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
           <primitive object={node} />
         </RigidBody>
       ))}
-
       <RigidBody type="fixed" colliders="hull">
         <primitive object={colliderNodes.fixed} />
       </RigidBody>
-
       {WAVE_NAMES.map((name, i) => (
         <group key={`visual-${name}`} ref={(el) => (visualRefs.current[i] = el)}>
           <primitive object={preparedVisual[name]} />
