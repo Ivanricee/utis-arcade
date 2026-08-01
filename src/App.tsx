@@ -57,7 +57,7 @@ function App() {
             depth: true,
             powerPreference: 'high-performance',
           }}
-          camera={{ position: [0, 0, 5], fov: 45 }}
+          camera={{ position: [0, 0, 5], fov: 40 }}
         >
           {/**
             new THREE.Euler(
@@ -74,26 +74,26 @@ function App() {
           <Environment
             files="/hdri/lighthdri.hdr"
             //resolution={256}
-            environmentIntensity={0.5}
-            //background
+            environmentIntensity={0.8}
+            // background
             environmentRotation={
               new THREE.Euler(
                 THREE.MathUtils.degToRad(0),
-                THREE.MathUtils.degToRad(195),
-                THREE.MathUtils.degToRad(-5),
+                THREE.MathUtils.degToRad(90),
+                THREE.MathUtils.degToRad(-2),
                 'YZX'
               )
             }
             backgroundRotation={
               new THREE.Euler(
                 THREE.MathUtils.degToRad(0),
-                THREE.MathUtils.degToRad(195),
-                THREE.MathUtils.degToRad(-5),
+                THREE.MathUtils.degToRad(90),
+                THREE.MathUtils.degToRad(-2),
                 'YZX'
               )
             }
           />
-          <ambientLight intensity={0.3} />
+
           <Suspense fallback={null}>
             <CompoundCollider />
             {/**
