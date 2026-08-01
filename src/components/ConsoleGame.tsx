@@ -40,7 +40,7 @@ export function ConsoleGame() {
         const material = mat as THREE.MeshStandardMaterial
         //lightmap
         material.lightMap = lightMap
-        material.lightMapIntensity = 5
+        material.lightMapIntensity = 6
         // normal map: intensifica el relieve/bump
 
         if (material.normalMap) {
@@ -51,7 +51,7 @@ export function ConsoleGame() {
           if (material.emissive.getHex() === 0x000000) {
             material.emissive.set(0xffffff)
           }
-          material.emissiveIntensity = 2
+          material.emissiveIntensity = 5
 
           material.toneMapped = false
         }
