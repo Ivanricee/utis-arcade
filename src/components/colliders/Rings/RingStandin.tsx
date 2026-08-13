@@ -1,8 +1,8 @@
-import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import type { RapierRigidBody } from '@react-three/rapier'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
 interface RingStandInProps {
   rigidBodyRefs: RapierRigidBody[]
 
@@ -18,7 +18,7 @@ const DEFAULT_COLORS = [
   '#ff44cc',
   '#ffffff',
   '#ff6644',
-  '#44ffcc',
+  '#44ffff',
 ]
 
 export function RingStandin({
@@ -27,8 +27,8 @@ export function RingStandin({
   rigidBodyRefs,
 }: RingStandInProps) {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
-  const { nodes } = useGLTF('/modelos/RING.glb')
-  const mesh = nodes.ring as THREE.Mesh
+  const { geometries, material } = usePlasticMeshes()
+  const mesh = geometries.ring
 
   const matrix = useRef(new THREE.Matrix4())
   const pos = useRef(new THREE.Vector3())
@@ -54,16 +54,6 @@ export function RingStandin({
     instancedMeshRef.current.instanceMatrix.needsUpdate = true
   })
 
-  if (!mesh.material) {
-    console.warn('no material found in mesh')
-    return null
-  }
-
-  const material = useMemo(() => {
-    const mtrl = (mesh.material as THREE.MeshStandardMaterial).clone()
-    return mtrl
-  }, [mesh.material])
-
   useEffect(() => {
     if (!instancedMeshRef.current) return
 
@@ -80,18 +70,18 @@ export function RingStandin({
       instancedMeshRef.current!.setColorAt(i, color)
     })
 
-    // Notifica a Three.js que las matrices y colores cambiaron
+    //notify matrix and color changes
     instancedMeshRef.current.instanceMatrix.needsUpdate = true
     if (instancedMeshRef.current.instanceColor) {
       instancedMeshRef.current.instanceColor.needsUpdate = true
     }
   }, [positions, colors])
-  if (!mesh?.geometry) return null
+  if (!mesh) return null
   return (
     <instancedMesh
       frustumCulled={false}
       ref={instancedMeshRef}
-      args={[mesh.geometry, material, positions.length]}
+      args={[mesh, material, positions.length]}
       castShadow
       receiveShadow
     />

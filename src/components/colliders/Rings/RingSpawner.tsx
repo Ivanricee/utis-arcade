@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
 import { useWaterForce } from '../../../hooks/useWaterForce'
+import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
 
 interface RingSpawnerProps {
   onPositionsReady?: (positions: [number, number, number][]) => void
@@ -20,18 +20,19 @@ interface RingSpawnerProps {
   friction?: number
 }
 
-function extractMeshData(mesh: THREE.Mesh): {
+function extractGeometryData(geometry: THREE.BufferGeometry): {
   basePosition: THREE.Vector3
   diameter: number
 } {
-  mesh.geometry.computeBoundingBox()
+  geometry.computeBoundingBox()
 
-  const basePosition = mesh.position.clone()
+  const basePosition = new THREE.Vector3()
   let diameter = 1
 
-  if (mesh.geometry.boundingBox) {
+  if (geometry.boundingBox) {
     const size = new THREE.Vector3()
-    mesh.geometry.boundingBox.getSize(size)
+    geometry.boundingBox.getSize(size)
+    geometry.boundingBox.getCenter(basePosition)
     diameter = Math.max(size.x, size.y, size.z)
   }
 
@@ -71,15 +72,15 @@ export function RingSpawner({
   restitution = 0.2, //rebote
   friction = 0.5,
 }: RingSpawnerProps) {
-  const { nodes } = useGLTF('/modelos/RING.glb')
+  const { geometries } = usePlasticMeshes()
   const rigidBodyRefs = useRef<RapierRigidBody[]>([] as RapierRigidBody[])
-  const mesh = nodes.ring as THREE.Mesh | undefined
+  const mesh = geometries.ring
   useWaterForce(rigidBodyRefs)
 
-  //  base y diámetro from mesh
+  //  base y diámetro from geometry
   const { basePosition, diameter } = useMemo(() => {
-    if (!mesh?.geometry) return { basePosition: new THREE.Vector3(), diameter: 1 }
-    return extractMeshData(mesh)
+    if (!mesh) return { basePosition: new THREE.Vector3(), diameter: 1 }
+    return extractGeometryData(mesh)
   }, [mesh])
 
   // stack position from mesh

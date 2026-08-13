@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
+
 import { useEffect, useMemo, useRef } from 'react'
 import {
   BallCollider,
@@ -9,6 +9,7 @@ import {
   RigidBody,
   type CollisionPayload,
 } from '@react-three/rapier'
+import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
 
 interface TorusRingColliderProps {
   ringIndex: number
@@ -93,13 +94,13 @@ export function CompoundTorusRingCollider({
   // stays the same for the lifetime of the component
   const stableUserData = useRef<RigidBodyUserData>({ ringIndex, isInsidePost: false })
 
-  const { nodes } = useGLTF('/modelos/RING.glb')
-  const mesh = nodes.ring as THREE.Mesh
-  if (!mesh.geometry) return null
+  const { geometries } = usePlasticMeshes()
+  const mesh = geometries.ring
+  if (!mesh) return null
 
   const { tubeRadius, torusRadius, holeAxis, center } = useMemo(
-    () => extractTorusDimmensions(mesh.geometry),
-    [mesh.geometry]
+    () => extractTorusDimmensions(mesh),
+    [mesh]
   )
 
   const spherePositions = useMemo(
