@@ -42,7 +42,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       ).clone() as THREE.MeshStandardMaterial
       mat.lightMap = lightMap
       mat.lightMapIntensity = 2
-      mat.normalScale?.set(0.65, 0.65)
+      mat.normalScale?.set(0.4, 0.4)
       mat.emissiveIntensity = 1
       mat.needsUpdate = true
       mesh.material = mat
@@ -109,7 +109,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
           // ref={lightRef}
           position={[0, 1.5, -0.15]}
           intensity={7}
-          distance={1}
+          distance={1.4}
           decay={0.5}
           color="#0256FF"
           castShadow={false} // opcional, ya es false por defecto
