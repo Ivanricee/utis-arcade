@@ -3,10 +3,7 @@ import { useGLTF, useTexture } from '@react-three/drei'
 import { useGameStore } from '../store/gameStore'
 import { useEffect } from 'react'
 import * as THREE from 'three'
-//import { WATER_ZONE } from '../hooks/useWaterForce'
-/**
- 1 Mari aumentar los nromales
- */
+
 export function ConsoleGame() {
   const { scene } = useGLTF('/modelos/base.glb')
   const lightMap = useTexture('/modelos/textures/base/bakedLightBase.png')
