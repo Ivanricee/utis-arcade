@@ -12,7 +12,7 @@ const WAVE_CONFIG = [
 ]
 
 const PHASE_STEP = (Math.PI * 2) / 5
-const WAVE_NAMES = ['w1', 'w2', 'w3', 'w4', 'w5'] as const // convex1, convex2, collider3, convex4, conex5
+const WAVE_NAMES = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6'] as const // convex1, convex2, collider3, convex4, conex5
 
 export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<boolean> }) {
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
@@ -32,9 +32,8 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
 
   // Clona y prepara cada mesh visual UNA sola vez
   const preparedVisual = useMemo(() => {
-    const allNames = [...WAVE_NAMES, 'w6'] as const
     const result: Record<string, THREE.Mesh> = {}
-    allNames.forEach((name) => {
+    WAVE_NAMES.forEach((name) => {
       const original = visualNodes[name] as THREE.Mesh
       const mesh = original.clone()
       const mat = (
