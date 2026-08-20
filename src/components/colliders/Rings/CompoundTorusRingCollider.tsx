@@ -10,6 +10,7 @@ import {
   type CollisionPayload,
 } from '@react-three/rapier'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
+import { useGameStore } from '../../../store/gameStore'
 
 interface TorusRingColliderProps {
   ringIndex: number
@@ -107,12 +108,17 @@ export function CompoundTorusRingCollider({
     () => generateSpherePositions(torusRadius, sphereCount, overlapFactor, holeAxis, center),
     [torusRadius, tubeRadius, sphereCount, overlapFactor, holeAxis, center]
   )
-
+  const registerFloatingBody = useGameStore((s) => s.registerFloatingBody)
+  const unregisterFloatingBody = useGameStore((s) => s.unregisterFloatingBody)
+  const setRingInPost = useGameStore((s) => s.setRingInPost)
+  //starts with a randm impulse
   useEffect(() => {
     if (!rigidBodyRef.current) return
-    if (onRigidBodyReady) onRigidBodyReady(rigidBodyRef.current)
+    const rb = rigidBodyRef.current
+    registerFloatingBody(rb)
+    onRigidBodyReady?.(rb)
     const strength = 0.0035
-    rigidBodyRef.current.applyImpulse(
+    rb.applyImpulse(
       {
         x: (Math.random() - 0.5) * strength,
         y: (Math.random() - 0.5) * strength * 0.6,
@@ -120,15 +126,17 @@ export function CompoundTorusRingCollider({
       },
       true
     )
+    return () => unregisterFloatingBody(rb)
   }, [])
 
   const handleIntersectionEnter = ({ other }: CollisionPayload) => {
+    const otherUserData = other.rigidBody?.userData as RigidBodyUserData | undefined
     if (other.colliderObject?.name !== 'stick') return
-    if ((other.rigidBody?.userData as RigidBodyUserData | undefined)?.postIndex === undefined)
-      return
+    if (otherUserData?.postIndex === undefined) return
 
     intersectionCount.current = Math.max(0, intersectionCount.current + 1)
     stableUserData.current.isInsidePost = true
+    setRingInPost(ringIndex, otherUserData?.postIndex)
   }
 
   const handleIntersectionExit = ({ other }: CollisionPayload) => {
@@ -138,6 +146,7 @@ export function CompoundTorusRingCollider({
 
     intersectionCount.current = Math.max(0, intersectionCount.current - 1)
     stableUserData.current.isInsidePost = intersectionCount.current > 0
+    setRingInPost(ringIndex, null)
   }
 
   return (
