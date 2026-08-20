@@ -4,6 +4,7 @@ import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
 import { useWaterForce } from '../../../hooks/useWaterForce'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
+import { useRingPoleAssist } from '../../../hooks/useRingPoleAssist'
 
 interface RingSpawnerProps {
   onPositionsReady?: (positions: [number, number, number][]) => void
@@ -75,7 +76,8 @@ export function RingSpawner({
   const { geometries } = usePlasticMeshes()
   const rigidBodyRefs = useRef<RapierRigidBody[]>([] as RapierRigidBody[])
   const mesh = geometries.ring
-  useWaterForce(rigidBodyRefs)
+  useWaterForce()
+  useRingPoleAssist()
 
   //  base y diámetro from geometry
   const { basePosition, diameter } = useMemo(() => {
