@@ -14,7 +14,6 @@ import CompundArrowCollider from './CompundArrowCollider'
 import CompoundWings from './CompundWings'
 import CompoundHorseCollider from './CompoundHorseCollider'
 import { CompoundFloatingCollider } from './CompundFloatingCollider'
-import Rings from './Rings/Rings'
 
 export type WallDataType = Array<{
   args: [number, number, number]
@@ -60,7 +59,7 @@ export default function CompoundCollider() {
   }, [])
 
   return (
-    <Physics debug={false} gravity={[0, -1.4, 0]} paused={paused}>
+    <Physics debug={true} gravity={[0, -1.4, 0]} paused={paused}>
       <RigidBody ref={rigidBodyRef} type="fixed" colliders={false}>
         {/**
         <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
@@ -85,7 +84,7 @@ export default function CompoundCollider() {
         ))}
         <CompoundWings />
       </RigidBody>
-      <Rings />
+
       <CompoundHorseCollider isPaused={isPaused} />
       <CompundArrowCollider />
     </Physics>

@@ -1,16 +1,22 @@
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { FLOATING_DATA } from '../../store/model-data'
 import usePlasticMeshes from '../../hooks/usePlasticMeshes'
-import { Instance, Instances } from '@react-three/drei'
-import * as THREE from 'three'
 import { OctoField } from './Octo/OctoField'
+import { useWaterForce } from '../../hooks/useWaterForce'
+import { useRingPoleAssist } from '../../hooks/useRingPoleAssist'
+import Rings from './Rings/Rings'
+import { useFloatingAnimation } from '../../hooks/useFloatingAnimation'
+import { BalloonField } from './Balloon/BalloonField'
 
 export function CompoundFloatingCollider() {
   const { geometries, material } = usePlasticMeshes()
-
-  const { balloon, zepp1, zepp2 } = FLOATING_DATA
+  useWaterForce()
+  useRingPoleAssist()
+  useFloatingAnimation()
+  const { zepp1, zepp2 } = FLOATING_DATA
   return (
     <>
+      <Rings />
       <RigidBody type="kinematicPosition" colliders={false}>
         <CuboidCollider
           args={[zepp1.scale[0], zepp1.scale[1], zepp1.scale[2]]}
@@ -26,32 +32,7 @@ export function CompoundFloatingCollider() {
       </RigidBody>
 
       <OctoField />
-      <RigidBody type="kinematicPosition" colliders={false}>
-        <CuboidCollider
-          args={[balloon.scale[0], balloon.scale[1], balloon.scale[2]]}
-          position={[balloon.position[0], balloon.position[1], balloon.position[2]]}
-          rotation={[balloon.rotation[0], balloon.rotation[1], balloon.rotation[2]]}
-        />
-        <BalloonInstancedCollider geometries={geometries} material={material} />
-      </RigidBody>
+      <BalloonField />
     </>
-  )
-}
-interface PlasticMeshType {
-  geometries: Record<string, THREE.BufferGeometry>
-  material: THREE.MeshStandardMaterial
-}
-const BALLOON_POSITIONS = [
-  [0, 0.25, 0],
-  [0, 0.2, -1.5],
-] as [number, number, number][]
-
-const BalloonInstancedCollider = ({ geometries, material }: PlasticMeshType) => {
-  return (
-    <Instances geometry={geometries.balloon} material={material}>
-      {BALLOON_POSITIONS.map((pos) => (
-        <Instance position={pos} key={pos.join(',')} />
-      ))}
-    </Instances>
   )
 }
