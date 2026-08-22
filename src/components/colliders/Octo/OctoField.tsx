@@ -6,8 +6,6 @@ import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
 import { OctoRigidBody } from './OctoRigidBody'
 import { generateOctoInstances } from '../../../store/octo-data'
 
-const OCTO_COUNT = 4
-
 const _matrix = new THREE.Matrix4()
 const _position = new THREE.Vector3()
 const _quaternion = new THREE.Quaternion()
@@ -18,7 +16,8 @@ export function OctoField() {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const rigidBodyRefs = useRef<(RapierRigidBody | null)[]>([])
 
-  const instances = useMemo(() => generateOctoInstances(OCTO_COUNT), [])
+  const instances = useMemo(() => generateOctoInstances({ left: 2, central: 5, right: 2 }), [])
+  const octoCount = instances.length
   const pivotOffset = useMemo(() => {
     const geo = geometries.octo
     geo.computeBoundingBox()
@@ -62,7 +61,7 @@ export function OctoField() {
       ))}
       <instancedMesh
         ref={instancedMeshRef}
-        args={[geometries.octo, material, OCTO_COUNT]}
+        args={[geometries.octo, material, octoCount]}
         frustumCulled={false}
         castShadow
         receiveShadow
