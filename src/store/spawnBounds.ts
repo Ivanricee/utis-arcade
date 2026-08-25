@@ -5,9 +5,9 @@ export interface SpawnBounds {
 }
 
 export const LEFT_ZONE_BOUNDS: SpawnBounds = {
-  x: [-1.2, -0.8],
-  y: [1.0, 1.6],
-  z: [-0.6, 0.6],
+  x: [-0.58, -0.35],
+  y: [1.501, 2.25],
+  z: [0.75, 0.8604],
 }
 //centrea spawns
 export const CENTRAL_ZONE_OCTO_BOUNDS = {
@@ -16,9 +16,9 @@ export const CENTRAL_ZONE_OCTO_BOUNDS = {
   z: [-0.4, 0.4] as [number, number],
 }
 export const RIGHT_ZONE_BOUNDS: SpawnBounds = {
-  x: [0.8, 1.2],
-  y: [1.0, 1.6],
-  z: [-0.6, 0.6],
+  x: [-0.58, -0.35],
+  y: [1.5, 2.2],
+  z: [-0.8, -0.75001],
 }
 
 export const randomBetween = (min: number, max: number) => min + Math.random() * (max - min)
