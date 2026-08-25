@@ -16,9 +16,11 @@ export function BalloonField() {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const rigidBodyRefs = useRef<(RapierRigidBody | null)[]>([])
 
-  const instances = useMemo(() => generateBalloonInstances({ left: 2, central: 0, right: 2 }), [])
+  const instances = useMemo(() => generateBalloonInstances({ left: 1, central: 1, right: 1 }), [])
   const totalBalloons = instances.length
+  const pivotOffset = useMemo(() => new THREE.Vector3(0.28, -1.48, 0.03), [])
 
+  const _offset = new THREE.Vector3()
   useFrame(() => {
     const mesh = instancedMeshRef.current
     if (!mesh) return
@@ -27,9 +29,12 @@ export function BalloonField() {
       if (!rb) return
       const pos = rb.translation()
       const rot = rb.rotation()
-      _position.set(pos.x, pos.y, pos.z)
       _quaternion.set(rot.x, rot.y, rot.z, rot.w)
       _scale.setScalar(instances[i].scale)
+
+      _offset.copy(pivotOffset).applyQuaternion(_quaternion).multiply(_scale)
+      _position.set(pos.x, pos.y, pos.z).add(_offset)
+
       _matrix.compose(_position, _quaternion, _scale)
       mesh.setMatrixAt(i, _matrix)
     })
@@ -42,8 +47,10 @@ export function BalloonField() {
         <BalloonRigidBody
           key={instance.id}
           basePosition={instance.basePosition}
+          floatCenter={instance.floatCenter}
           scale={instance.scale}
           phase={instance.phase}
+          colliderOffset={[-pivotOffset.x, -pivotOffset.y, -pivotOffset.z]}
           onRigidBodyReady={(rb) => {
             rigidBodyRefs.current[i] = rb
           }}
