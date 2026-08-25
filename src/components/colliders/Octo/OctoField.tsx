@@ -16,15 +16,9 @@ export function OctoField() {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const rigidBodyRefs = useRef<(RapierRigidBody | null)[]>([])
 
-  const instances = useMemo(() => generateOctoInstances({ left: 2, central: 5, right: 2 }), [])
+  const instances = useMemo(() => generateOctoInstances({ left: 1, central: 4, right: 1 }), [])
   const octoCount = instances.length
-  const pivotOffset = useMemo(() => {
-    const geo = geometries.octo
-    geo.computeBoundingBox()
-    const center = new THREE.Vector3()
-    geo.boundingBox?.getCenter(center)
-    return center
-  }, [geometries.octo])
+  const pivotOffset = useMemo(() => new THREE.Vector3(-0.28, 1.4, -0.03), [])
   const _offset = new THREE.Vector3()
   useFrame(() => {
     const mesh = instancedMeshRef.current
