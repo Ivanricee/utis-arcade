@@ -2,18 +2,21 @@ import { useFrame } from '@react-three/fiber'
 import { Vector3 } from 'three'
 import { useGameStore } from '../store/gameStore'
 
-const FLOAT_AMPLITUDE_Y = 0.06
-const FLOAT_AMPLITUDE_XZ = 0.02
-const FLOAT_SPEED = 1.2
-const SPRING_STIFFNESS = 8
-const SPRING_DAMPING = 3
+const FLOAT_AMPLITUDE_Y = 0.1
+const FLOAT_AMPLITUDE_XZ = 0.1
+const FLOAT_SPEED = 0.8
+const SPRING_STIFFNESS = 0.001
+const SPRING_DAMPING = 0.003
 
-interface FloatingUserData {
+export interface FloatingBodyUserData {
+  isInsidePost?: boolean
   floatType?: 'balloon' | 'octo'
-  hasIdleFloat?: boolean //float + smooth return to base position
+  hasIdleFloat?: boolean //float + smooth return to base position (false)
+  floatCenter?: [number, number, number]
   basePosition?: [number, number, number]
   phase?: number
   impulseScale?: number
+  floatSuspendedUntil?: number
 }
 
 const _target = new Vector3()
@@ -27,20 +30,24 @@ export function useFloatingAnimation() {
 
     bodies.forEach((rigidBody) => {
       if (!rigidBody) return
-      const userData = rigidBody.userData as FloatingUserData | undefined
-      if (!userData?.hasIdleFloat || !userData.basePosition) return
+      const userData = rigidBody.userData as FloatingBodyUserData | undefined
+      //console.log({ userData })
 
-      const [bx, by, bz] = userData.basePosition
+      if (!userData?.hasIdleFloat || !userData.floatCenter) return
+      if (userData.floatSuspendedUntil && t < userData.floatSuspendedUntil) return
+      const [cx, cy, cz] = userData.floatCenter
       const phase = userData.phase ?? 0
 
       _target.set(
-        bx + Math.sin(t * FLOAT_SPEED + phase) * FLOAT_AMPLITUDE_XZ,
-        by + Math.sin(t * FLOAT_SPEED * 1.3 + phase) * FLOAT_AMPLITUDE_Y,
-        bz + Math.cos(t * FLOAT_SPEED + phase) * FLOAT_AMPLITUDE_XZ
+        cx + Math.sin(t * FLOAT_SPEED + phase) * FLOAT_AMPLITUDE_XZ,
+        cy + Math.sin(t * FLOAT_SPEED * 1.3 + phase) * FLOAT_AMPLITUDE_Y,
+        cz + Math.cos(t * FLOAT_SPEED + phase) * FLOAT_AMPLITUDE_XZ
       )
 
       const pos = rigidBody.translation()
       const vel = rigidBody.linvel()
+      if (!isFinite(pos.x) || !isFinite(pos.y) || !isFinite(pos.z)) return
+      //console.log({ pos, vel, rigidBody })
 
       rigidBody.applyImpulse(
         {

@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 import { useGameStore } from '../store/gameStore'
+import type { FloatingBodyUserData } from './useFloatingAnimation'
 
 export const WATER_ZONE = {
   centerX: -0.47,
@@ -13,11 +14,7 @@ export const WATER_ZONE = {
 }
 
 const REDUCED_FORCE_STRENGTH = 0.25
-
-interface FloatingBodyUserData {
-  isInsidePost?: boolean
-  impulseScale?: number
-}
+const FLOATING_SUSPEND_DURATION = 0.65
 
 export function useWaterForce() {
   const waterActive = useGameStore((state) => state.waterActive)
@@ -30,7 +27,7 @@ export function useWaterForce() {
     }
   }, [waterActive])
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!waterActive) return
 
     const bodies = useGameStore.getState().floatingBodies
@@ -41,7 +38,7 @@ export function useWaterForce() {
     waterPressureRef.current = nextPressure
     if (nextPressure === 0) setWaterActive(false)
     if (nextPressure <= 0) return
-
+    const now = state.clock.elapsedTime
     bodies.forEach((rigidBody) => {
       if (!rigidBody) return
 
@@ -52,8 +49,9 @@ export function useWaterForce() {
       const inZone = hDist < WATER_ZONE.radius && pos.y > WATER_ZONE.minY && pos.y < WATER_ZONE.maxY
       if (!inZone) return
       // get data from userData props
-      const isInsidePost = (rigidBody.userData as FloatingBodyUserData | undefined)?.isInsidePost
-      const impulseScale = (rigidBody.userData as FloatingBodyUserData)?.impulseScale ?? 1
+      const userData = rigidBody.userData as FloatingBodyUserData | undefined
+      const isInsidePost = userData?.isInsidePost
+      const impulseScale = userData?.impulseScale ?? 1
       const forceMultiplier = isInsidePost ? REDUCED_FORCE_STRENGTH : 1.0
 
       const distFalloff = Math.max(0, 1 - hDist / WATER_ZONE.radius)
@@ -71,6 +69,9 @@ export function useWaterForce() {
         },
         true
       )
+      if (userData?.hasIdleFloat) {
+        userData.floatSuspendedUntil = now + FLOATING_SUSPEND_DURATION
+      }
     })
   })
 }
