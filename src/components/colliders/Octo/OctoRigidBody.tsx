@@ -20,7 +20,7 @@ interface OctoRigidBodyProps {
 
 export function OctoRigidBody({ position, scale, onRigidBodyReady }: OctoRigidBodyProps) {
   const rigidBodyRef = useRef<RapierRigidBody>(null)
-  const userData = useRef<OctoUserData>({ floatType: 'octo', impulseScale: 0.18 })
+  const userData = useRef<OctoUserData>({ floatType: 'octo', impulseScale: 0.23 })
   const registerFloatingBody = useGameStore((s) => s.registerFloatingBody)
   const unregisterFloatingBody = useGameStore((s) => s.unregisterFloatingBody)
 
@@ -40,8 +40,8 @@ export function OctoRigidBody({ position, scale, onRigidBodyReady }: OctoRigidBo
       position={position}
       userData={userData.current}
       ccd
-      angularDamping={2}
-      linearDamping={3.9}
+      angularDamping={1}
+      linearDamping={2.9}
       restitution={0.2}
       friction={0.05}
       canSleep={false}
