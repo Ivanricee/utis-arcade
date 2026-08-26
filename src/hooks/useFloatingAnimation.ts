@@ -10,7 +10,7 @@ const SPRING_DAMPING = 0.003
 
 export interface FloatingBodyUserData {
   isInsidePost?: boolean
-  floatType?: 'balloon' | 'octo'
+  floatType?: 'balloon' | 'octo' | 'zepp'
   hasIdleFloat?: boolean //float + smooth return to base position (false)
   floatCenter?: [number, number, number]
   basePosition?: [number, number, number]
@@ -31,7 +31,6 @@ export function useFloatingAnimation() {
     bodies.forEach((rigidBody) => {
       if (!rigidBody) return
       const userData = rigidBody.userData as FloatingBodyUserData | undefined
-      //console.log({ userData })
 
       if (!userData?.hasIdleFloat || !userData.floatCenter) return
       if (userData.floatSuspendedUntil && t < userData.floatSuspendedUntil) return
