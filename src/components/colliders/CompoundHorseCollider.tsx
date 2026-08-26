@@ -4,11 +4,11 @@ import { RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 const WAVE_CONFIG = [
-  { amplitude: 0.025, speed: 1.42 },
-  { amplitude: 0.034, speed: 1.32 },
-  { amplitude: 0.02, speed: 1.24 },
-  { amplitude: 0.0345, speed: 1.12 },
-  { amplitude: 0.0215, speed: 0.9 },
+  { amplitude: 0.033, speed: 1.75 },
+  { amplitude: 0.041, speed: 1.65 },
+  { amplitude: 0.027, speed: 1.44 },
+  { amplitude: 0.0357, speed: 1.38 },
+  { amplitude: 0.0245, speed: 1.1 },
 ]
 
 const PHASE_STEP = (Math.PI * 2) / 5
