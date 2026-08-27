@@ -18,7 +18,7 @@ export const CENTRAL_ZONE_OCTO_BOUNDS = {
 
 export const CENTRAL_ZONE_ZEPP_BOUNDS = {
   x: [-0.65, -0.64] as [number, number],
-  y: [2.737, 2.83] as [number, number],
+  y: [2.737, 2.79] as [number, number],
   z: [0.1, 0.15] as [number, number],
 }
 export const RIGHT_ZONE_BOUNDS: SpawnBounds = {
