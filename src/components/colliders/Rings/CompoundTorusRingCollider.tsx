@@ -168,6 +168,7 @@ export function CompoundTorusRingCollider({
           position={[sphere.x, sphere.y, sphere.z]}
           args={[sphere.radius]}
           name={`ringIndex-${ringIndex}-sphere-${i}`}
+          collisionGroups={interactionGroups(1, [0])}
         />
       ))}
       <CylinderCollider
