@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useGameStore } from '../../../store/gameStore'
 import { FLOATING_DATA } from '../../../store/model-data'
 
-const BALLOON_GROUP = 6
+const BALLOON_GROUP = 1
 const BALLOON_COLLISION_GROUPS = interactionGroups(BALLOON_GROUP, [0])
 
 interface ZeppUserData {
@@ -31,7 +31,7 @@ export function ZeppRigidBody({
   phase,
   onRigidBodyReady,
 }: ZeppRigidBodyProps) {
-  const { zepp1 } = FLOATING_DATA
+  const { zepp1, zepp2 } = FLOATING_DATA
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const userData = useRef<ZeppUserData>({
     floatType: 'zepp',
@@ -65,17 +65,14 @@ export function ZeppRigidBody({
       gravityScale={0}
     >
       <CuboidCollider
-        args={[zepp1.scale[0] * scale, zepp1.scale[1] * scale, zepp1.scale[2] * scale]}
+        args={[zepp1.scale[0], zepp1.scale[1], zepp1.scale[2]]}
         collisionGroups={BALLOON_COLLISION_GROUPS}
       />
-      {/**
-         *
-        <CuboidCollider
-          args={[zepp2.scale[0] * scale, zepp2.scale[1] * scale, zepp2.scale[2] * scale]}
-          position={[0, -0.08, 0]}
-          collisionGroups={BALLOON_COLLISION_GROUPS}
-        />
-         */}
+      <CuboidCollider
+        args={[zepp1.scale[0] * scale, zepp1.scale[1] * scale, zepp1.scale[2] * scale]}
+        rotation={[zepp2.rotation[0], zepp2.rotation[1], zepp2.rotation[2]]}
+        collisionGroups={BALLOON_COLLISION_GROUPS}
+      />
     </RigidBody>
   )
 }
