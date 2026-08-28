@@ -14,6 +14,7 @@ import CompundArrowCollider from './CompundArrowCollider'
 import CompoundWings from './CompundWings'
 import CompoundHorseCollider from './CompoundHorseCollider'
 import { CompoundFloatingCollider } from './CompundFloatingCollider'
+import Dome from '../Dome'
 
 export type WallDataType = Array<{
   args: [number, number, number]
@@ -72,6 +73,7 @@ export default function CompoundCollider() {
 
 
         */}
+        <Dome />
         <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
         <CompoundFloatingCollider />
         {wallData.current.map((face, i) => (
