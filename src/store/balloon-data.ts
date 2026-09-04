@@ -6,10 +6,12 @@ import {
   type SpawnBounds,
 } from './spawnBounds'
 
-export const LEFT_FLOAT_CENTER: [number, number, number] = [-0.474, 1.9, 0.825]
-export const RIGHT_FLOAT_CENTER: [number, number, number] = [-0.4738, 1.9, -0.825]
-export const CENTER_FLOAT_CENTER: [number, number, number] = [1.0, 2, 0]
-const BALLOON_SCALE_RANGE: [number, number] = [0.8, 1.1]
+export const LEFT_FLOAT_CENTER: [number, number, number] = [-0.95, 0.45, -0.4]
+export const RIGHT_FLOAT_CENTER: [number, number, number] = [0.65, 0.45, -0.5]
+
+export const CENTER_FLOAT_CENTER: [number, number, number] = [0, 0.8, 0.45]
+
+const BALLOON_SCALE_RANGE: [number, number] = [1, 1.18]
 
 const FLOAT_SPREAD_RADIUS = 0.15 //offset from float center for each balloon
 export interface BalloonInstanceData {
