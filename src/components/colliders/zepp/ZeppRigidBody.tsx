@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react'
 import { useGameStore } from '../../../store/gameStore'
 import { FLOATING_DATA } from '../../../store/model-data'
 
-const BALLOON_GROUP = 1
-const BALLOON_COLLISION_GROUPS = interactionGroups(BALLOON_GROUP, [0])
+const ZEPP_GROUP = 2
+const ZEPP_COLLISION_GROUPS = interactionGroups(ZEPP_GROUP, [0])
 
 interface ZeppUserData {
   floatType: 'zepp'
@@ -66,12 +66,12 @@ export function ZeppRigidBody({
     >
       <CuboidCollider
         args={[zepp1.scale[0], zepp1.scale[1], zepp1.scale[2]]}
-        collisionGroups={BALLOON_COLLISION_GROUPS}
+        collisionGroups={ZEPP_COLLISION_GROUPS}
       />
       <CuboidCollider
         args={[zepp1.scale[0] * scale, zepp1.scale[1] * scale, zepp1.scale[2] * scale]}
         rotation={[zepp2.rotation[0], zepp2.rotation[1], zepp2.rotation[2]]}
-        collisionGroups={BALLOON_COLLISION_GROUPS}
+        collisionGroups={ZEPP_COLLISION_GROUPS}
       />
     </RigidBody>
   )

@@ -168,14 +168,14 @@ export function CompoundTorusRingCollider({
           position={[sphere.x, sphere.y, sphere.z]}
           args={[sphere.radius]}
           name={`ringIndex-${ringIndex}-sphere-${i}`}
-          collisionGroups={interactionGroups(1, [0])}
+          collisionGroups={interactionGroups(1, [0, 1])}
         />
       ))}
       <CylinderCollider
         sensor
         args={[0.001, torusRadius - tubeRadius]}
         position={[center.x, center.y, center.z]}
-        collisionGroups={interactionGroups(1, [0])}
+        collisionGroups={interactionGroups(1, [0, 1])}
         onIntersectionEnter={handleIntersectionEnter}
         onIntersectionExit={handleIntersectionExit}
       />
