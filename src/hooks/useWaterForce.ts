@@ -4,15 +4,14 @@ import { useGameStore } from '../store/gameStore'
 import type { FloatingBodyUserData } from './useFloatingAnimation'
 
 export const WATER_ZONE = {
-  centerX: -0.47,
-  centerZ: 0,
+  centerX: 0,
+  centerZ: -0.45,
   radius: 1,
-  minY: 1,
-  maxY: 2.8,
+  minY: -0.4,
+  maxY: 1.4,
   maxStrength: 0.0003, //main water pressure
   decayRate: 1 / 2,
 }
-
 const REDUCED_FORCE_STRENGTH = 0.25
 const FLOATING_SUSPEND_DURATION = 0.65
 
