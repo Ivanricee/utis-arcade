@@ -10,7 +10,18 @@ const ACTIVATION_HEIGHT_MARGIN = 1
 const ROTATION_IMPULSE_STRENGTH = 0.0000018
 const STICK_POS = ARROW_DATA.stick.position
 const STICK_SCALE = ARROW_DATA.stick.scale
-const getTopY = (baseY: number) => baseY + STICK_SCALE[1]
+const ARROW_ROTATION_Y = 1.6
+const ARROW_POSITIONS: [number, number, number][] = [
+  [-0.325, -1.615, -1.01],
+  [0, -1.5, -1],
+  [0.325, -1.615, -1.03],
+]
+
+const getWorldStickPosition = (arrowPosition: [number, number, number]) => {
+  const localStick = new Vector3(...STICK_POS)
+  localStick.applyAxisAngle(new Vector3(0, 1, 0), ARROW_ROTATION_Y)
+  return localStick.add(new Vector3(...arrowPosition))
+}
 
 interface RingUserData {
   ringIndex?: number
@@ -19,30 +30,17 @@ interface RingUserData {
 
 // Mantengo stickPosition/stickScale por si se usan para renderizar el mesh del stick en otro lado
 export const POLE_CONFIGS = [
-  {
-    id: 0,
-    basePosition: new Vector3(STICK_POS[0], STICK_POS[1], 0.325),
-    topY: getTopY(STICK_POS[1]),
-    radius: 0.28,
-    stickPosition: [STICK_POS[0], STICK_POS[1], STICK_POS[2] + 0.325] as [number, number, number],
-    stickScale: STICK_SCALE as [number, number, number],
-  },
-  {
-    id: 1,
-    basePosition: new Vector3(STICK_POS[0], STICK_POS[1], 0),
-    topY: getTopY(STICK_POS[1]),
-    radius: 0.28,
-    stickPosition: [STICK_POS[0], STICK_POS[1], STICK_POS[2]] as [number, number, number],
-    stickScale: STICK_SCALE as [number, number, number],
-  },
-  {
-    id: 2,
-    basePosition: new Vector3(STICK_POS[0], STICK_POS[1], -0.313),
-    topY: getTopY(STICK_POS[1]),
-    radius: 0.28,
-    stickPosition: [STICK_POS[0], STICK_POS[1], STICK_POS[2] - 0.313] as [number, number, number],
-    stickScale: STICK_SCALE as [number, number, number],
-  },
+  ...ARROW_POSITIONS.map((arrowPosition, id) => {
+    const stickPosition = getWorldStickPosition(arrowPosition)
+    return {
+      id,
+      basePosition: stickPosition,
+      topY: stickPosition.y + STICK_SCALE[1],
+      radius: 0.28,
+      stickPosition: stickPosition.toArray() as [number, number, number],
+      stickScale: STICK_SCALE as [number, number, number],
+    }
+  }),
 ]
 // Objetos reutilizables para evitar allocations en el loop de render
 const _q = new Quaternion()
