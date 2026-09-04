@@ -11,7 +11,13 @@ interface ArrowColliderProps {
 
 function ArrowCollider({ position, postIndex }: ArrowColliderProps) {
   return (
-    <RigidBody type="fixed" colliders={false} position={position} userData={{ postIndex }}>
+    <RigidBody
+      type="fixed"
+      colliders={false}
+      position={position}
+      rotation={[0, 1.6, 0]}
+      userData={{ postIndex }}
+    >
       {Object.entries(ARROW_DATA).map(([name, c]) => {
         if (name === 'tail_1') {
           return (
@@ -55,9 +61,9 @@ export default function CompundArrowCollider() {
   return (
     <>
       <Instances geometry={geometries.post} material={material} limit={3} frustumCulled={false}>
-        <ArrowCollider position={[0, -0.115, 0.325]} postIndex={0} />
-        <ArrowCollider position={[0, 0, 0]} postIndex={1} />
-        <ArrowCollider position={[0, -0.115, -0.313]} postIndex={2} />
+        <ArrowCollider position={[-0.325, -1.615, -1.01]} postIndex={0} />
+        <ArrowCollider position={[0, -1.5, -1]} postIndex={1.5} />
+        <ArrowCollider position={[0.325, -1.615, -1.03]} postIndex={2} />
       </Instances>
     </>
   )

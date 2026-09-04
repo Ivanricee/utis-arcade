@@ -54,6 +54,8 @@ export function OctoField() {
         />
       ))}
       <instancedMesh
+        position={[0, 1.5, 0]}
+        rotation={[0, 1.5, 0]}
         ref={instancedMeshRef}
         args={[geometries.octo, material, octoCount]}
         frustumCulled={false}

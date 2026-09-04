@@ -58,6 +58,8 @@ export function ZeppField() {
         />
       ))}
       <instancedMesh
+        position={[0, 1.5, 0]}
+        rotation={[0, 1.5, 0]}
         ref={instancedMeshRef}
         args={[geometries.zeppe, material, totalZepps]}
         frustumCulled={false}

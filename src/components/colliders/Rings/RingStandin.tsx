@@ -79,6 +79,8 @@ export function RingStandin({
   if (!mesh) return null
   return (
     <instancedMesh
+      position={[0, 1.5, 0]}
+      rotation={[0, 1.5, 0]}
       frustumCulled={false}
       ref={instancedMeshRef}
       args={[mesh, material, positions.length]}
