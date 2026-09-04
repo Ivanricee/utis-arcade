@@ -3,6 +3,18 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
+//import { POLE_CONFIGS } from '../../../hooks/useRingPoleAssist'
+
+/*const COLLIDER_PARENT_POSITION = new THREE.Vector3(0, -1.5, 0)
+const COLLIDER_PARENT_INVERSE_ROTATION = new THREE.Quaternion()
+  .setFromEuler(new THREE.Euler(0, -1.5, 0))
+  .invert()
+
+const worldToColliderLocal = (worldPosition: THREE.Vector3) =>
+  worldPosition
+    .clone()
+    .sub(COLLIDER_PARENT_POSITION)
+    .applyQuaternion(COLLIDER_PARENT_INVERSE_ROTATION)*/
 
 interface RingSpawnerProps {
   onPositionsReady?: (positions: [number, number, number][]) => void
@@ -145,33 +157,41 @@ export function RingSpawner({
           />
         ) : null
       )}
-      {/*POLE_CONFIGS.map((config) => (
-        <group key={`debug-pole-${config.id}`}>
-          {
-            // show where the stick is visually
-          }
-          <mesh position={config.stickPosition} scale={config.stickScale}>
-            <cylinderGeometry args={[0.5, 0.5, 1, 8]} />
-            <meshBasicMaterial color="hotpink" transparent opacity={0.4} wireframe />
-          </mesh>
+      {/*POLE_CONFIGS.map((config) => {
+        const stickPosition = worldToColliderLocal(new THREE.Vector3(...config.stickPosition))
+        const topPosition = worldToColliderLocal(
+          new THREE.Vector3(config.stickPosition[0], config.topY, config.stickPosition[2])
+        )
+        const basePosition = worldToColliderLocal(config.basePosition)
 
-          {
-            // shows exactly where is the top of the stick
-          }
-          <mesh position={[config.stickPosition[0], config.topY, config.stickPosition[2]]}>
-            <sphereGeometry args={[0.05]} />
-            <meshBasicMaterial color="yellow" wireframe />
-          </mesh>
+        return (
+          <group key={`debug-pole-${config.id}`}>
+            {
+              // show where the stick is visually
+            }
+            <mesh position={stickPosition} scale={config.stickScale}>
+              <cylinderGeometry args={[0.5, 0.5, 1, 8]} />
+              <meshBasicMaterial color="hotpink" transparent opacity={0.4} wireframe />
+            </mesh>
 
-          {
-            // shows the radius of attraction
-          }
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={config.basePosition}>
-            <ringGeometry args={[config.radius - 0.01, config.radius, 32]} />
-            <meshBasicMaterial color="cyan" transparent opacity={0.3} side={2} />
-          </mesh>
-        </group>
-      ))*/}
+            {
+              // shows exactly where is the top of the stick
+            }
+            <mesh position={topPosition}>
+              <sphereGeometry args={[0.05]} />
+              <meshBasicMaterial color="yellow" wireframe />
+            </mesh>
+
+            {
+              // shows the radius of attraction
+            }
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={basePosition}>
+              <ringGeometry args={[config.radius - 0.01, config.radius, 32]} />
+              <meshBasicMaterial color="cyan" transparent opacity={0.3} side={2} />
+            </mesh>
+          </group>
+        )
+      })*/}
     </>
   )
 }
