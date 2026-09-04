@@ -7,10 +7,10 @@ import {
   type SpawnBounds,
 } from './spawnBounds'
 
-export const LEFT_FLOAT_CENTER: [number, number, number] = [-0.474, 2.63, 0.825]
+export const LEFT_FLOAT_CENTER: [number, number, number] = [-0.474, 1.43, 0.825]
 
-export const CENTER_FLOAT_CENTER: [number, number, number] = [-0.65, 2.63, 0.15]
-export const RIGHT_FLOAT_CENTER: [number, number, number] = [-0.4738, 2.63, -0.825]
+export const CENTER_FLOAT_CENTER: [number, number, number] = [0, 1.2, -0.5]
+export const RIGHT_FLOAT_CENTER: [number, number, number] = [-0.4738, 1.43, -0.825]
 const ZEPP_SCALE_RANGE: [number, number] = [0.95, 1]
 
 const FLOAT_SPREAD_RADIUS = 0.1 //offset from float center for each zepp
