@@ -82,7 +82,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
 
     for (let i = 0; i < WAVE_CONFIG.length; i++) {
       const { amplitude, speed } = WAVE_CONFIG[i]
-      const y = baseLimitY[i] + (Math.sin(time * speed + i * PHASE_STEP) - 1) * amplitude
+      const y = baseLimitY[i] + (Math.sin(time * speed + i * PHASE_STEP) - 1) * amplitude - 1.5
 
       rigidRefs.current[i]?.setNextKinematicTranslation({ x: 0, y, z: 0 })
 
@@ -92,7 +92,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
   })
 
   return (
-    <>
+    <group rotation={[0, -1.5, 0]} /* position={[0, 0, 0]}*/>
       {
         <pointLight
           position={[-0.47, 1.39, 0.3]}
@@ -121,20 +121,25 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
             rigidRefs.current[i] = el
           }}
           colliders="hull"
+          rotation={[0, -0, 0]}
           type="kinematicPosition"
         >
           <primitive object={node} />
         </RigidBody>
       ))}
-      <RigidBody type="fixed" colliders="hull">
-        <primitive object={colliderNodes.fixed} />
+      <RigidBody type="fixed" colliders="hull" position={[0, -1.5, 0]}>
+        <primitive object={colliderNodes.fixed} /*position={[0, -5.5, 0]} */ />
       </RigidBody>
       {WAVE_NAMES.map((name, i) => (
-        <group key={`visual-${name}`} ref={(el) => (visualRefs.current[i] = el)}>
+        <group
+          key={`visual-${name}`}
+          ref={(el) => (visualRefs.current[i] = el)}
+          rotation={[0, 0, 0]}
+        >
           <primitive object={preparedVisual[name]} />
         </group>
       ))}
-      <primitive object={preparedVisual.w6} />
-    </>
+      <primitive object={preparedVisual.w6} position={[-0.334, -1.475, 0.025]} />
+    </group>
   )
 }
