@@ -4,10 +4,8 @@ import * as THREE from 'three'
 
 const isMeshNode = (node: THREE.Object3D): node is THREE.Mesh => node instanceof THREE.Mesh
 
-const hasTextureMaterial = (
-  mat: THREE.Material
-): mat is THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial =>
-  'normalMap' in mat && 'normalScale' in mat && 'roughnessMap' in mat
+const hasTextureMaterial = (mat: THREE.Material): mat is THREE.MeshPhysicalMaterial =>
+  'normalMap' in mat && 'normalScale' in mat && 'roughnessMap' in mat && 'specularIntensity' in mat
 
 export default function Dome() {
   const { nodes, materials } = useGLTF('/modelos/cupula.glb')
@@ -15,7 +13,7 @@ export default function Dome() {
   useEffect(() => {
     Object.values(materials).forEach((mat) => {
       if (hasTextureMaterial(mat) && mat.normalMap) {
-        mat.normalScale.set(30, 30)
+        mat.normalScale.set(19, 19)
       }
     })
   }, [materials])
@@ -42,8 +40,10 @@ export default function Dome() {
               <MeshTransmissionMaterial
                 normalMap={textureMaterial?.normalMap ?? null}
                 roughnessMap={textureMaterial?.roughnessMap ?? null}
+                specularIntensityMap={textureMaterial?.specularIntensityMap ?? null}
+                specularIntensity={2}
                 transmission={1}
-                roughness={0.5}
+                roughness={0.75}
                 thickness={0.98}
                 ior={1.2}
                 chromaticAberration={0.5}
@@ -61,7 +61,6 @@ export default function Dome() {
             </mesh>
           )
         }
-
         return (
           <mesh
             key={name}
