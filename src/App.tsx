@@ -1,4 +1,4 @@
-import { Environment, OrbitControls, Stats, useGLTF } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import DprManager from './components/DprManager'
 import { Suspense, useState } from 'react'
@@ -6,6 +6,7 @@ import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
 import { ConsoleGame } from './components/ConsoleGame'
 import * as THREE from 'three'
+import { Backdrop } from './components/Backdrop'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -21,10 +22,7 @@ function App() {
     vertices?: number
   }>({})
   return (
-    <main
-      className="grid h-screen w-screen overflow-hidden"
-      style={{ gridTemplateRows: 'auto 1fr' }}
-    >
+    <main className="grid h-screen w-screen overflow-hidden">
       <header className="flex justify-center">
         <h1>Iron Sea Rings</h1>
 
@@ -55,10 +53,17 @@ function App() {
             antialias: false,
             stencil: false,
             depth: true,
+            alpha: true,
             powerPreference: 'high-performance',
           }}
-          camera={{ position: [0, 0, 5], fov: 40 }}
+          camera={{ position: [0, 0, 0], rotation: [0, 0, 10] }}
         >
+          {' '}
+          <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={40}>
+            {/* al ser hijo de la cámara, esto queda fijo respecto a ella */}
+
+            <Backdrop imageUrl="/modelos/ref_1.png" distance={50} />
+          </PerspectiveCamera>
           {/**
             new THREE.Euler(
               THREE.MathUtils.degToRad(278),
@@ -93,9 +98,10 @@ function App() {
               )
             }
           />
-
           <Suspense fallback={null}>
-            <CompoundCollider />
+            <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
+              <CompoundCollider />
+            </group>
             {/**
                *
               <Stage
@@ -107,8 +113,10 @@ function App() {
                */}
           </Suspense>
           <Suspense fallback={null}>
+            <group rotation={[0, -1.5, 0]} position={[0, -1.5, 0]}>
+              <ConsoleGame />
+            </group>
             //
-            <ConsoleGame />
             {/*
               <Stage
                 adjustCamera={false}
@@ -118,7 +126,16 @@ function App() {
               ></Stage>
                 */}
           </Suspense>
-          <OrbitControls enableDamping />
+          <OrbitControls
+            enableDamping
+
+            /* enablePan={false}
+            enableZoom={false}
+            minAzimuthAngle={THREE.MathUtils.degToRad(-30)} // izquierda
+            maxAzimuthAngle={THREE.MathUtils.degToRad(30)} // derecha
+            minPolarAngle={THREE.MathUtils.degToRad(75)} // arriba
+            maxPolarAngle={THREE.MathUtils.degToRad(105)} // abajo*/
+          />
         </Canvas>
       </div>
     </main>
