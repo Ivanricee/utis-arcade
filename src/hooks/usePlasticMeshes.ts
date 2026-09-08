@@ -35,8 +35,8 @@ export default function usePlasticMeshes() {
 
     const newMaterial = (ogMaterial as THREE.MeshStandardMaterial).clone()
     newMaterial.lightMap = lightMap
-    newMaterial.lightMapIntensity = 1.2
-    newMaterial.emissiveIntensity = 0.9
+    newMaterial.lightMapIntensity = 1
+    newMaterial.emissiveIntensity = 1
     newMaterial.normalScale?.set(1.7, 1.7)
     newMaterial.needsUpdate = true
     return newMaterial
