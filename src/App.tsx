@@ -6,7 +6,7 @@ import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
 import { ConsoleGame } from './components/ConsoleGame'
 import * as THREE from 'three'
-import { Backdrop } from './components/Backdrop'
+import { BackgroundOnly } from './components/BackgroundOnly'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -58,12 +58,8 @@ function App() {
           }}
           camera={{ position: [0, 0, 0], rotation: [0, 0, 10] }}
         >
-          {' '}
-          <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={40}>
-            {/* al ser hijo de la cámara, esto queda fijo respecto a ella */}
+          <PerspectiveCamera makeDefault position={[0, 0, 2.5]} fov={60} />
 
-            <Backdrop imageUrl="/modelos/ref_1.png" distance={50} />
-          </PerspectiveCamera>
           {/**
             new THREE.Euler(
               THREE.MathUtils.degToRad(278),
@@ -76,42 +72,46 @@ function App() {
           <Stats showPanel={0} />
           <Stats showPanel={2} className="stats-memory" />
           <DprManager />
-          <Environment
-            files="/hdri/lighthdri.hdr"
-            //resolution={256}
-            environmentIntensity={0.8}
-            // background
-            environmentRotation={
-              new THREE.Euler(
-                THREE.MathUtils.degToRad(0),
-                THREE.MathUtils.degToRad(90),
-                THREE.MathUtils.degToRad(-2),
-                'YZX'
-              )
+          <Suspense fallback={null}>
+            {
+              //<Environment files="/hdri/background.hdr" background="only" />
             }
-            backgroundRotation={
-              new THREE.Euler(
-                THREE.MathUtils.degToRad(0),
-                THREE.MathUtils.degToRad(90),
-                THREE.MathUtils.degToRad(-2),
-                'YZX'
-              )
-            }
-          />
+            <BackgroundOnly imageUrl="/modelos/equirect-background2.png" />
+            <Environment
+              files="/hdri/lighthdri.hdr"
+              //resolution={256}
+              environmentIntensity={0.8}
+              //background
+              environmentRotation={
+                new THREE.Euler(
+                  THREE.MathUtils.degToRad(0),
+                  THREE.MathUtils.degToRad(0),
+                  THREE.MathUtils.degToRad(2),
+                  'YZX'
+                )
+              }
+              backgroundRotation={
+                new THREE.Euler(
+                  /* THREE.MathUtils.degToRad(0),
+                  THREE.MathUtils.degToRad(20),
+                  THREE.MathUtils.degToRad(-2),*/
+                  THREE.MathUtils.degToRad(-10),
+                  THREE.MathUtils.degToRad(68),
+                  THREE.MathUtils.degToRad(-20),
+                  'YZX'
+                )
+              }
+            />
+          </Suspense>
           <Suspense fallback={null}>
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
               <CompoundCollider />
             </group>
-            {/**
-               *
-              <Stage
-                adjustCamera={false}
-                intensity={0.5}
-                shadows="contact"
-                environment={null}
-              ></Stage>
-               */}
           </Suspense>
+          {/**
+               *
+
+               */}
           <Suspense fallback={null}>
             <group rotation={[0, -1.5, 0]} position={[0, -1.5, 0]}>
               <ConsoleGame />
