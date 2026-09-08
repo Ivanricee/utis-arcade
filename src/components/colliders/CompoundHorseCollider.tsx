@@ -95,8 +95,8 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
     <group rotation={[0, -1.5, 0]} /* position={[0, 0, 0]}*/>
       {
         <pointLight
-          position={[-0.47, 1.39, 0.3]}
-          intensity={0.85}
+          position={[-0.47, -0.15, 0.3]}
+          intensity={3}
           distance={1}
           decay={1}
           color="#09FF00"
@@ -106,11 +106,21 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       {
         <pointLight
           // ref={lightRef}
-          position={[0, 1.5, -0.15]}
-          intensity={8}
+          position={[-0.2, 0.15, -0.15]}
+          intensity={10}
           distance={1.4}
           decay={0.5}
-          color="#0256FF"
+          color="#004aeb"
+          castShadow={false} // opcional, ya es false por defecto
+        />
+      }
+      {
+        <pointLight
+          position={[-0.55, 0.6, -0.05]}
+          intensity={10}
+          distance={1.4}
+          decay={1}
+          color="#ff4b04"
           castShadow={false} // opcional, ya es false por defecto
         />
       }
