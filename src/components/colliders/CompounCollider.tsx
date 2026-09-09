@@ -68,19 +68,6 @@ export default function CompoundCollider() {
         position={[0, -1.5, 0]}
         rotation={[0, -1.5, 0]}
       >
-        {/**
-        <mesh geometry={(nodes[DOME_MESH_NAME] as THREE.Mesh).geometry}>
-          <meshStandardMaterial color="black" side={THREE.DoubleSide} />
-        </mesh>
-
-        <mesh geometry={(nodes[WALLS_MESH_NAME] as THREE.Mesh).geometry}>
-          <meshStandardMaterial color="red" side={THREE.DoubleSide} />
-        </mesh>
-
-
-        */}
-        <Dome />
-        <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
         <CompoundFloatingCollider />
         {wallData.current.map((face, i) => (
           <CuboidCollider
@@ -90,9 +77,10 @@ export default function CompoundCollider() {
             rotation={face.rotation}
           />
         ))}
+        <Dome />
+        <TrimeshCollider args={[domeColliderData.vertices, domeColliderData.indices]} />
         <CompoundWings />
       </RigidBody>
-
       <CompoundHorseCollider isPaused={isPaused} />
       <CompundArrowCollider />
     </Physics>
