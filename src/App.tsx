@@ -1,8 +1,8 @@
-import { Environment, OrbitControls, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import DprManager from './components/DprManager'
-import { Suspense, useState } from 'react'
-import { RenderMetrics } from './components/RenderMetrics'
+import { Suspense } from 'react'
+//import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
 import { ConsoleGame } from './components/ConsoleGame'
 import * as THREE from 'three'
@@ -13,14 +13,14 @@ import { BackgroundOnly } from './components/BackgroundOnly'
 }*/
 
 function App() {
-  const [metrics, setMetrics] = useState<{
+  /*const [metrics, setMetrics] = useState<{
     drawCalls?: number
     triangles?: number
     geometries?: number
     textures?: number
     shaders?: number
     vertices?: number
-  }>({})
+  }>({})*/
   return (
     <main className="grid h-screen w-screen overflow-hidden">
       <header className="flex justify-center">
@@ -39,11 +39,11 @@ function App() {
             zIndex: 100,
           }}
         >
-          {Object.entries(metrics).map(([k, v]) => (
+          {/*Object.entries(metrics).map(([k, v]) => (
             <div key={k}>
               {k}: {v}
             </div>
-          ))}
+          ))*/}
         </div>
       </header>
       <div className="relative">
@@ -58,25 +58,22 @@ function App() {
           }}
           camera={{ position: [0, 0, 0], rotation: [0, 0, 10] }}
         >
-          <PerspectiveCamera makeDefault position={[0, 0, 2.5]} fov={60} />
-
-          {/**
+          <Suspense fallback={null}>
+            <PerspectiveCamera makeDefault position={[0, 0, 2.5]} fov={60} />
+            {/**
             new THREE.Euler(
               THREE.MathUtils.degToRad(278),
               THREE.MathUtils.degToRad(67),
               THREE.MathUtils.degToRad(-15),
               'YZX'
             )
+            <RenderMetrics onUpdate={setMetrics} />
              */}
-          <RenderMetrics onUpdate={setMetrics} />
-          <Stats showPanel={0} />
-          <Stats showPanel={2} className="stats-memory" />
-          <DprManager />
-          <Suspense fallback={null}>
-            {
-              //<Environment files="/hdri/background.hdr" background="only" />
-            }
-            <BackgroundOnly imageUrl="/modelos/equirect-background2.png" />
+
+            <Stats showPanel={0} />
+            <Stats showPanel={2} className="stats-memory" />
+            <DprManager />
+            <BackgroundOnly imageUrl="/modelos/equirect-background2.webp" />
             <Environment
               files="/hdri/lighthdri.hdr"
               //resolution={256}
@@ -102,44 +99,29 @@ function App() {
                 )
               }
             />
-          </Suspense>
-          <Suspense fallback={null}>
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
               <CompoundCollider />
             </group>
-          </Suspense>
-          {/**
-               *
 
-               */}
-          <Suspense fallback={null}>
             <group rotation={[0, -1.5, 0]} position={[0, -1.5, 0]}>
               <ConsoleGame />
             </group>
-            //
-            {/*
-              <Stage
-                adjustCamera={false}
-                intensity={0.5}
-                shadows="contact"
-                environment={null}
-              ></Stage>
-                */}
-          </Suspense>
-          <OrbitControls
-            enableDamping
 
-            /* enablePan={false}
+            <OrbitControls
+              enableDamping
+
+              /* enablePan={false}
             enableZoom={false}
-            minAzimuthAngle={THREE.MathUtils.degToRad(-30)} // izquierda
+            minAzimuthAngle={THREE.MathUtils.degToRad(--30)} // izquierda
             maxAzimuthAngle={THREE.MathUtils.degToRad(30)} // derecha
             minPolarAngle={THREE.MathUtils.degToRad(75)} // arriba
             maxPolarAngle={THREE.MathUtils.degToRad(105)} // abajo*/
-          />
+            />
+          </Suspense>
         </Canvas>
       </div>
     </main>
   )
 }
-useGLTF.preload('/modelos/Untitled.glb')
+
 export default App
