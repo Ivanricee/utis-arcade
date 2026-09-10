@@ -109,13 +109,14 @@ function App() {
 
             <OrbitControls
               enableDamping
+              // enablePan={false}
 
-              /* enablePan={false}
-            enableZoom={false}
-            minAzimuthAngle={THREE.MathUtils.degToRad(--30)} // izquierda
-            maxAzimuthAngle={THREE.MathUtils.degToRad(30)} // derecha
-            minPolarAngle={THREE.MathUtils.degToRad(75)} // arriba
-            maxPolarAngle={THREE.MathUtils.degToRad(105)} // abajo*/
+              minDistance={1.75}
+              maxDistance={7}
+              minAzimuthAngle={THREE.MathUtils.degToRad(-90)} // izquierda
+              maxAzimuthAngle={THREE.MathUtils.degToRad(100)} // derecha
+              minPolarAngle={THREE.MathUtils.degToRad(20)} // arriba
+              maxPolarAngle={THREE.MathUtils.degToRad(120)} // abajo
             />
           </Suspense>
         </Canvas>
