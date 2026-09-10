@@ -61,17 +61,17 @@ export default function Dome() {
             specularIntensityMap={material?.specularIntensityMap ?? null}
             specularIntensity={2}
             transmission={1}
-            roughness={useTransmission ? 0.75 : 0}
-            thickness={useTransmission ? 0.98 : 0}
-            ior={1.2}
-            chromaticAberration={useTransmission ? 0.6 : 0}
-            anisotropy={useTransmission ? 2.2 : 0}
-            distortion={useTransmission ? 0.8 : 0}
-            distortionScale={useTransmission ? 0.5 : 0}
-            temporalDistortion={useTransmission ? 0.4 : 0}
-            clearcoat={useTransmission ? 0.2 : 0}
+            roughness={0.55}
+            thickness={0.78}
+            ior={1.35}
+            chromaticAberration={0.9}
+            anisotropy={2.2}
+            distortion={0.8}
+            distortionScale={0.5}
+            temporalDistortion={0.4}
+            clearcoat={0.2}
             attenuationColor="#ffffff"
-            attenuationDistance={useTransmission ? 1 : 0.001}
+            attenuationDistance={1}
             color="#f9fff4"
             samples={samples}
             resolution={resolution}
@@ -84,9 +84,9 @@ export default function Dome() {
             specularIntensityMap={material?.specularIntensityMap ?? null}
             transparent
             opacity={0.2}
-            roughness={0.75}
+            roughness={0.35}
             ior={1.8}
-            color="#5cdeff"
+            color="#1347b6"
             envMapIntensity={1.2}
           />
         )}
