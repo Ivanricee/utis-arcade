@@ -12,9 +12,9 @@ const STICK_POS = ARROW_DATA.stick.position
 const STICK_SCALE = ARROW_DATA.stick.scale
 const ARROW_ROTATION_Y = 1.6
 const ARROW_POSITIONS: [number, number, number][] = [
-  [-0.325, -1.615, -1.01],
-  [0, -1.5, -1],
-  [0.325, -1.615, -1.03],
+  [-0.375, -1.615, -0.965],
+  [-0.05, -1.5, -0.965],
+  [0.275, -1.615, -0.965],
 ]
 
 const getWorldStickPosition = (arrowPosition: [number, number, number]) => {
