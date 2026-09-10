@@ -11,14 +11,15 @@ interface RingStandInProps {
 }
 
 const DEFAULT_COLORS = [
-  '#ffcc00',
-  '#44ff44',
-  '#00ccff',
-  '#4444ff',
-  '#ff44cc',
-  '#ffffff',
-  '#ff6644',
-  '#44ffff',
+  '#54f30a',
+  '#24f783',
+  '#ff4ca0',
+  '#6572ec',
+  '#85c72e',
+  '#f3e8f0',
+  '#8f2f1a',
+  '#beff45',
+  '#64a56d',
 ]
 
 export function RingStandin({

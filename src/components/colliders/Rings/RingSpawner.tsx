@@ -3,9 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
-//import { POLE_CONFIGS } from '../../../hooks/useRingPoleAssist'
+/*import { POLE_CONFIGS } from '../../../hooks/useRingPoleAssist'
 
-/*const COLLIDER_PARENT_POSITION = new THREE.Vector3(0, -1.5, 0)
+const COLLIDER_PARENT_POSITION = new THREE.Vector3(0, -1.5, 0)
 const COLLIDER_PARENT_INVERSE_ROTATION = new THREE.Quaternion()
   .setFromEuler(new THREE.Euler(0, -1.5, 0))
   .invert()

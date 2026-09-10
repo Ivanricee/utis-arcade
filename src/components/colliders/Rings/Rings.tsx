@@ -12,7 +12,7 @@ export default function Rings() {
         onRefsReady={setRigidBodyRefs}
         ringsPerStack={3}
         stackSpacing={0.12}
-        spawnDelay={500}
+        spawnDelay={800}
         onPositionsReady={setRingPositions}
       />
       <RingStandin rigidBodyRefs={rigidBodyRefs} positions={ringPositions} />
