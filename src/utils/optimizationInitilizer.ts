@@ -14,7 +14,7 @@ export function getInitialTier(): Tier {
 }
 export const TIER_SETTINGS = {
   low: { resolution: 256, samples: 1, useTransmission: false },
-  mid: { resolution: 1024, samples: 4, useTransmission: true },
-  high: { resolution: 2048, samples: 8, useTransmission: true },
+  mid: { resolution: 1024, samples: 7, useTransmission: true },
+  high: { resolution: 2048, samples: 12, useTransmission: true },
 }
 export const TIER_ORDER: Tier[] = ['low', 'mid', 'high']
