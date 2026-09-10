@@ -39,6 +39,15 @@ export default function usePlasticMeshes() {
     newMaterial.emissiveIntensity = 1
     newMaterial.normalScale?.set(1.7, 1.7)
     newMaterial.needsUpdate = true
+    newMaterial.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+         #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )
+           totalEmissiveRadiance *= vColor.rgb;
+         #endif`
+      )
+    }
     return newMaterial
   }, [lightMap, plasticNodes])
 
