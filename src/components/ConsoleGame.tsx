@@ -7,7 +7,7 @@ import * as THREE from 'three'
 
 export function ConsoleGame() {
   const { scene } = useGLTF('/modelos/base.glb')
-  const lightMap = useTexture('/modelos/textures/base/bakedLightBase.png')
+  const lightMap = useTexture('/modelos/textures/base/bakedLightBase.webp')
   const waterActive = useGameStore((state) => state.waterActive)
   const setWaterActive = useGameStore((state) => state.setWaterActive)
 

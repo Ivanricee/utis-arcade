@@ -17,7 +17,7 @@ const WAVE_NAMES = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6'] as const // convex1, con
 export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<boolean> }) {
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const { nodes: visualNodes } = useGLTF('/modelos/horses.glb')
-  const lightMap = useTexture('/modelos/textures/horses/lightmap_horses.png')
+  const lightMap = useTexture('/modelos/textures/horses/lightmap_horses.webp')
   //const lightRef = useRef(null)
   //useHelper(lightRef, THREE.PointLightHelper, 0.1, 'red') // tamaño, color
   useEffect(() => {
