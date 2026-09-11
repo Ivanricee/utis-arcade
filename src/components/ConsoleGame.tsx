@@ -1,66 +1,33 @@
-import type { ThreeEvent } from '@react-three/fiber'
-import { useGLTF, useTexture } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import { useGameStore } from '../store/gameStore'
-import { useEffect } from 'react'
-import * as THREE from 'three'
+import { useBakedLighting } from '../hooks/useBaseBakedLight'
+import { usePushButton } from '../hooks/usePushButton'
 //import { WATER_ZONE } from '../hooks/useWaterForce'
-
+const BUTTON_NAME = 'base_button'
 export function ConsoleGame() {
   const { scene } = useGLTF('/modelos/base.glb')
-  const lightMap = useTexture('/modelos/textures/base/bakedLightBase.webp')
+
   const waterActive = useGameStore((state) => state.waterActive)
   const setWaterActive = useGameStore((state) => state.setWaterActive)
-
+  useBakedLighting(scene)
+  const buttonHandlers = usePushButton({
+    scene,
+    buttonName: BUTTON_NAME,
+    //iconTexturePath: '/text/push.png',
+    iconTexturePath: '/text/push.webp',
+    pushAxis: 'x',
+    pushDirection: -2,
+    onPress: () => setWaterActive(true),
+    onRelease: () => setWaterActive(false),
+    isBlocked: () => waterActive,
+  })
   // const centerY = (WATER_ZONE.minY + WATER_ZONE.maxY) / 2
   //const height = WATER_ZONE.maxY - WATER_ZONE.minY
 
-  useEffect(() => {
-    // Config de la textura del lightmap
-    lightMap.flipY = false
-    lightMap.colorSpace = THREE.SRGBColorSpace
-    lightMap.channel = 1
-    lightMap.needsUpdate = true
-
-    scene.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) return
-      const geo = child.geometry
-
-      // Solo aplicamos a mallas que realmente tengan el UV del lightmap
-      if (!geo.attributes.uv1) return
-
-      // Compatibilidad con three < r152 (hardcodea el nombre 'uv2')
-      if (!geo.attributes.uv2) {
-        geo.setAttribute('uv2', geo.attributes.uv1)
-      }
-
-      const mats = Array.isArray(child.material) ? child.material : [child.material]
-      mats.forEach((mat) => {
-        const material = mat as THREE.MeshStandardMaterial
-        //lightmap
-        material.lightMap = lightMap
-        material.lightMapIntensity = 6
-        // normal map: intensifica el relieve/bump
-
-        if (material.normalMap) {
-          material.normalScale.set(0.6, 0.6)
-        }
-
-        if (material.emissiveMap) {
-          if (material.emissive.getHex() === 0x000000) {
-            material.emissive.set(0xffffff)
-          }
-          material.emissiveIntensity = 5
-
-          material.toneMapped = false
-        }
-        material.needsUpdate = true
-      })
-    })
-  }, [scene, lightMap])
-
   return (
     <>
-      <primitive
+      <primitive object={scene} {...buttonHandlers} />
+      {/* <primitive
         object={scene}
         onPointerDown={(e: ThreeEvent<PointerEvent>) => {
           if (e.object.name !== 'base_button') return
@@ -73,7 +40,7 @@ export function ConsoleGame() {
         }}
       />
       // debug:
-      {/*<mesh position={[WATER_ZONE.centerZ, centerY + 1.5, WATER_ZONE.centerX]}>
+      <mesh position={[WATER_ZONE.centerZ, centerY + 1.5, WATER_ZONE.centerX]}>
         <cylinderGeometry args={[WATER_ZONE.radius, WATER_ZONE.radius, height, 30]} />
         <meshStandardMaterial color="gold" transparent opacity={0.5} wireframe />
       </mesh>*/}
