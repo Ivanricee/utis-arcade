@@ -1,12 +1,14 @@
 import { Environment, OrbitControls, PerspectiveCamera, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import DprManager from './components/DprManager'
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 //import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
 import { ConsoleGame } from './components/ConsoleGame'
 import * as THREE from 'three'
 import { BackgroundOnly } from './components/BackgroundOnly'
+import { useGameStore } from './store/gameStore'
+import { getTierSettings } from './utils/optimizationInitilizer'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -21,10 +23,17 @@ function App() {
     shaders?: number
     vertices?: number
   }>({})*/
+  const tier = useGameStore((state) => state.tier)
+  const dpr = useGameStore((state) => state.dpr)
+  const settings = useMemo(() => getTierSettings(dpr)[tier], [tier, dpr])
+  const { resolution, samples, useTransmission } = settings
   return (
     <main className="grid h-screen w-screen overflow-hidden">
       <header className="flex justify-center">
-        <h1>Iron Sea Rings</h1>
+        <h5>
+          Iron Sea Rings resolution: {resolution}, samples: {samples}, tier: {tier}
+          {useTransmission}
+        </h5>
 
         <div
           style={{
