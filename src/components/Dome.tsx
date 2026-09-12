@@ -2,7 +2,7 @@ import { MeshTransmissionMaterial, useGLTF } from '@react-three/drei'
 import { useMemo } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '../store/gameStore'
-import { getTierSettings } from '../utils/optimizationInitilizer'
+import { getTierSettings, type Tier } from '../utils/optimizationInitilizer'
 
 const isMeshNode = (node: THREE.Object3D): node is THREE.Mesh => node instanceof THREE.Mesh
 
@@ -13,6 +13,11 @@ type DomeMaterial = THREE.MeshPhysicalMaterial & {
 const hasTextureMaterial = (mat: THREE.Material): mat is DomeMaterial =>
   'normalMap' in mat && 'normalScale' in mat && 'roughnessMap' in mat && 'specularIntensity' in mat
 
+const getTierValue = (tier: Tier) => {
+  if (tier === 'mid') return 0
+  if (tier === 'high') return 0.4
+  return 0.8
+}
 export default function Dome() {
   const tier = useGameStore((state) => state.tier)
   const dpr = useGameStore((state) => state.dpr)
@@ -67,11 +72,11 @@ export default function Dome() {
             roughness={0.5}
             thickness={0.78}
             ior={1.35}
-            chromaticAberration={1}
+            chromaticAberration={tier === 'mid' ? 0 : 0.5}
             anisotropy={4}
             distortion={0.5}
-            distortionScale={0.9}
-            temporalDistortion={0.4}
+            distortionScale={2}
+            temporalDistortion={getTierValue(tier)}
             clearcoat={0.2}
             attenuationColor="#0e30f3"
             attenuationDistance={5}
