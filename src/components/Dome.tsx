@@ -2,7 +2,7 @@ import { MeshTransmissionMaterial, useGLTF } from '@react-three/drei'
 import { useMemo } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '../store/gameStore'
-import { TIER_SETTINGS } from '../utils/optimizationInitilizer'
+import { getTierSettings } from '../utils/optimizationInitilizer'
 
 const isMeshNode = (node: THREE.Object3D): node is THREE.Mesh => node instanceof THREE.Mesh
 
@@ -14,8 +14,11 @@ const hasTextureMaterial = (mat: THREE.Material): mat is DomeMaterial =>
   'normalMap' in mat && 'normalScale' in mat && 'roughnessMap' in mat && 'specularIntensity' in mat
 
 export default function Dome() {
-  const settings = useGameStore((state) => TIER_SETTINGS[state.tier])
+  const tier = useGameStore((state) => state.tier)
+  const dpr = useGameStore((state) => state.dpr)
+  const settings = useMemo(() => getTierSettings(dpr)[tier], [tier, dpr])
   const { resolution, samples, useTransmission } = settings
+  //console.log({ tier, resolution, samples })
   const { nodes, materials } = useGLTF('/modelos/cupula.glb')
   const cupulaDown = isMeshNode(nodes.cupula_down) ? nodes.cupula_down : null
   const cupulaUp = isMeshNode(nodes.cupula_up) ? nodes.cupula_up : null
@@ -61,21 +64,20 @@ export default function Dome() {
             specularIntensityMap={material?.specularIntensityMap ?? null}
             specularIntensity={2}
             transmission={1}
-            roughness={0.55}
+            roughness={0.5}
             thickness={0.78}
             ior={1.35}
-            chromaticAberration={0.9}
-            anisotropy={2.2}
-            distortion={0.8}
-            distortionScale={0.5}
+            chromaticAberration={1}
+            anisotropy={4}
+            distortion={0.5}
+            distortionScale={0.9}
             temporalDistortion={0.4}
             clearcoat={0.2}
-            attenuationColor="#ffffff"
-            attenuationDistance={1}
+            attenuationColor="#0e30f3"
+            attenuationDistance={5}
             color="#f9fff4"
             samples={samples}
             resolution={resolution}
-            metalness={0}
           />
         ) : (
           <meshPhysicalMaterial
