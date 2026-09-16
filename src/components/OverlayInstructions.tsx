@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useGameStore } from '../store/gameStore'
 
 export function OverlayInstructions() {
-  const [draftName, setDraftName] = useState('')
+  const [draftName, setDraftName] = useState(useGameStore.getState().playerName)
   const setPlayerName = useGameStore((state) => state.setPlayerName)
 
   const handleConfirm = () => {
