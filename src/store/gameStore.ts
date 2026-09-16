@@ -14,6 +14,9 @@ interface GameStore {
   floatingBodies: RapierRigidBody[]
   tier: Tier
   dpr: number
+  playerName: string
+  // actions
+  setPlayerName: (name: string) => void
   registerFloatingBody: (body: RapierRigidBody) => void
   unregisterFloatingBody: (body: RapierRigidBody) => void
   setRingInPost: (ringIndex: number, postIndex: number | null) => void
@@ -32,8 +35,11 @@ export const useGameStore = create<GameStore>((set) => ({
   //optimizations state
   tier: getInitialTier(),
   dpr: 1.5,
+  //custom player namme
+  playerName: '@Ivanrice_',
 
   // actions
+  setPlayerName: (name) => set({ playerName: name }),
   registerFloatingBody: (body) =>
     set((state) => ({ floatingBodies: [...state.floatingBodies, body] })),
   unregisterFloatingBody: (body) =>

@@ -9,6 +9,7 @@ import * as THREE from 'three'
 import { BackgroundOnly } from './components/BackgroundOnly'
 import { useGameStore } from './store/gameStore'
 import { getTierSettings } from './utils/optimizationInitilizer'
+import { OverlayInstructions } from './components/OverlayInstructions'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -34,7 +35,7 @@ function App() {
           Iron Sea Rings resolution: {resolution}, samples: {samples}, tier: {tier}
           {useTransmission}
         </h5>
-
+        <OverlayInstructions />
         <div
           style={{
             position: 'fixed',
