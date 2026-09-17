@@ -37,7 +37,7 @@ export default function Dome() {
     if (hasTextureMaterial(material) && material.normalMap) {
       material.normalScale.set(2.5, 2.5)
       material.opacity = 0.05
-      material.color = new THREE.Color('#402d58')
+      material.color = new THREE.Color('#000816')
       material.roughness = 0.7
       material.specularIntensity = 0.4
     }
@@ -78,7 +78,7 @@ export default function Dome() {
             distortionScale={2}
             temporalDistortion={getTierValue(tier)}
             clearcoat={0.2}
-            attenuationColor="#0e30f3"
+            attenuationColor="#0923b6"
             attenuationDistance={5}
             color="#f9fff4"
             samples={samples}
