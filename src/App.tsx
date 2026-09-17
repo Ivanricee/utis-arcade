@@ -14,7 +14,13 @@ import { OverlayInstructions } from './components/OverlayInstructions'
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
 }*/
-
+THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars_fragment.replace(
+  'vec3 CustomToneMapping( vec3 color ) { return color; }',
+  `vec3 CustomToneMapping( vec3 color ) {
+    vec3 mapped = ACESFilmicToneMapping( color );
+    return mix( color, mapped, 0.6 ); // 80% curva, 20% crudo
+  }`
+)
 function App() {
   /*const [metrics, setMetrics] = useState<{
     drawCalls?: number
@@ -63,8 +69,10 @@ function App() {
             antialias: false,
             stencil: false,
             depth: true,
-            alpha: true,
+            alpha: false,
             powerPreference: 'high-performance',
+            toneMapping: THREE.CustomToneMapping,
+            toneMappingExposure: 1.2,
           }}
           camera={{ position: [0, 0, 0], rotation: [0, 0, 10] }}
         >
@@ -102,9 +110,9 @@ function App() {
                   /* THREE.MathUtils.degToRad(0),
                   THREE.MathUtils.degToRad(20),
                   THREE.MathUtils.degToRad(-2),*/
-                  THREE.MathUtils.degToRad(-10),
-                  THREE.MathUtils.degToRad(68),
-                  THREE.MathUtils.degToRad(-20),
+                  THREE.MathUtils.degToRad(-5),
+                  THREE.MathUtils.degToRad(64),
+                  THREE.MathUtils.degToRad(-5),
                   'YZX'
                 )
               }
@@ -120,7 +128,6 @@ function App() {
             <OrbitControls
               enableDamping
               // enablePan={false}
-
               minDistance={1.75}
               maxDistance={7}
               minAzimuthAngle={THREE.MathUtils.degToRad(-90)} // izquierda
