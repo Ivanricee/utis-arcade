@@ -43,6 +43,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       mat.lightMapIntensity = 8
       mat.normalScale?.set(0.4, 0.4)
       mat.emissiveIntensity = 2
+      mat.toneMapped = true
       mat.needsUpdate = true
       mesh.material = mat
       result[name] = mesh
@@ -67,9 +68,11 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
     ;[...colliderWaveNodes, colliderNodes.fixed].forEach((node) => {
       node?.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          const material = child.material
-          if (Array.isArray(material)) material.forEach((m) => (m.visible = false))
-          else material.visible = false
+          const material = Array.isArray(child.material) ? child.material : [child.material]
+
+          material.forEach((m) => {
+            m.visible = false
+          })
         }
       })
     })

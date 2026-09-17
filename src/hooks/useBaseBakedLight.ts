@@ -21,12 +21,12 @@ export function useBakedLighting(scene: THREE.Object3D) {
       mats.forEach((mat) => {
         const material = mat as THREE.MeshStandardMaterial
         material.lightMap = lightMap
-        material.lightMapIntensity = 6
+        material.lightMapIntensity = 8
         if (material.normalMap) material.normalScale.set(0.6, 0.6)
         if (material.emissiveMap) {
           if (material.emissive.getHex() === 0x000000) material.emissive.set(0xffffff)
-          material.emissiveIntensity = 5
-          material.toneMapped = false
+          material.emissiveIntensity = 1
+          material.toneMapped = true
         }
         material.needsUpdate = true
       })
