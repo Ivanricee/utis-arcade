@@ -75,7 +75,7 @@ export function drawText(
     ctx.translate(x, y)
     ctx.rotate((-8 * Math.PI) / 180)
     ctx.globalCompositeOperation = 'multiply'
-    ctx.globalAlpha = 0.8
+    ctx.globalAlpha = 0.6
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.font = `24px ${FONT_NAME}`
