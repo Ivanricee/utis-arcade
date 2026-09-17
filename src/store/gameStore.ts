@@ -36,7 +36,7 @@ export const useGameStore = create<GameStore>((set) => ({
   tier: getInitialTier(),
   dpr: 1.5,
   //custom player namme
-  playerName: '@Ivanrice_',
+  playerName: '@IvanRice_',
 
   // actions
   setPlayerName: (name) => set({ playerName: name }),
