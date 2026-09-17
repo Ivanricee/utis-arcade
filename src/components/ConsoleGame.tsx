@@ -18,6 +18,7 @@ export type canvasType = {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
 }
+
 export function ConsoleGame() {
   const { scene } = useGLTF('/modelos/base.glb')
 
@@ -69,18 +70,7 @@ export function ConsoleGame() {
   return (
     <>
       <primitive object={scene} {...buttonHandlers} />
-      {/* <primitive
-        object={scene}
-        onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-          if (e.object.name !== 'base_button') return
-          if (waterActive) return // chorro ya activo, no hace nada
-          setWaterActive(true) // activa el chorro
-        }}
-        onPointerUp={(e: ThreeEvent<PointerEvent>) => {
-          if (e.object.name !== 'base_button') return
-          setWaterActive(false)
-        }}
-      />
+      {/*
       // debug:
       <mesh position={[WATER_ZONE.centerZ, centerY + 1.5, WATER_ZONE.centerX]}>
         <cylinderGeometry args={[WATER_ZONE.radius, WATER_ZONE.radius, height, 30]} />
