@@ -7,7 +7,7 @@ export default function usePlasticMeshes() {
     nodes: Record<string, THREE.Object3D>
   }
 
-  const lightMap = useTexture('/modelos/textures/plastic/plastic_lightmap.webp')
+  const lightMap = useTexture('/modelos/textures/plastic/plastic_lightmap.WebP')
 
   useEffect(() => {
     lightMap.colorSpace = THREE.LinearSRGBColorSpace

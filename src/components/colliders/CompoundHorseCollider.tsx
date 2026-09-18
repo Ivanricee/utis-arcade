@@ -19,7 +19,7 @@ const getWaveY = (baseLimitY: number, wave: (typeof WAVES)[number], i: number, t
 export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<boolean> }) {
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const { nodes: visualNodes } = useGLTF('/modelos/horses.glb')
-  const lightMap = useTexture('/modelos/textures/horses/lightmap_horses.webp')
+  const lightMap = useTexture('/modelos/textures/horses/lightmap_horses.WebP')
   //const lightRef = useRef(null)
   //useHelper(lightRef, THREE.PointLightHelper, 0.1, 'red') // tamaño, color
   useEffect(() => {
