@@ -1,5 +1,5 @@
 import { MeshTransmissionMaterial, useGLTF } from '@react-three/drei'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '../store/gameStore'
 import { getTierSettings, type Tier } from '../utils/optimizationInitilizer'
@@ -22,18 +22,13 @@ export default function Dome() {
   const tier = useGameStore((state) => state.tier)
   const dpr = useGameStore((state) => state.dpr)
   const settings = useMemo(() => getTierSettings(dpr)[tier], [tier, dpr])
-  const { resolution, samples, useTransmission } = settings
   //console.log({ tier, resolution, samples })
   const { nodes, materials } = useGLTF('/modelos/cupula.glb')
   const cupulaDown = isMeshNode(nodes.cupula_down) ? nodes.cupula_down : null
   const cupulaUp = isMeshNode(nodes.cupula_up) ? nodes.cupula_up : null
   const material = materials.cupula1 as DomeMaterial
 
-  if (!cupulaDown || !cupulaUp) {
-    return null
-  }
-
-  useMemo(() => {
+  useEffect(() => {
     if (hasTextureMaterial(material) && material.normalMap) {
       material.normalScale.set(2.5, 2.5)
       material.opacity = 0.05
@@ -42,7 +37,10 @@ export default function Dome() {
       material.specularIntensity = 0.4
     }
   }, [material])
-
+  const { resolution, samples, useTransmission } = settings
+  if (!cupulaDown || !cupulaUp) {
+    return null
+  }
   return (
     <group>
       <mesh
