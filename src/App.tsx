@@ -1,4 +1,4 @@
-import { Environment, OrbitControls, PerspectiveCamera, Stats } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import DprManager from './components/DprManager'
 import { Suspense, useMemo } from 'react'
@@ -20,6 +20,23 @@ THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars
     vec3 mapped = ACESFilmicToneMapping( color );
     return mix( color, mapped, 0.6 ); // 80% curva, 20% crudo
   }`
+)
+useGLTF.preload('/modelos/base.glb')
+useGLTF.preload('/modelos/ConvexMesh.glb')
+useGLTF.preload('/modelos/cupula.glb')
+useGLTF.preload('/modelos/plastics.glb')
+const ENV_ROTATION = new THREE.Euler(
+  THREE.MathUtils.degToRad(0),
+  THREE.MathUtils.degToRad(0),
+  THREE.MathUtils.degToRad(2),
+  'YZX'
+)
+
+const BG_ROTATION = new THREE.Euler(
+  THREE.MathUtils.degToRad(10),
+  THREE.MathUtils.degToRad(72),
+  THREE.MathUtils.degToRad(-5),
+  'YZX'
 )
 function App() {
   /*const [metrics, setMetrics] = useState<{
@@ -90,32 +107,15 @@ function App() {
 
             <Stats showPanel={0} />
             <Stats showPanel={2} className="stats-memory" />
-            <DprManager />
+            {<DprManager />}
             <BackgroundOnly imageUrl="/modelos/equirect-background2.webp" />
             <Environment
               files="/hdri/lighthdri.hdr"
-              //resolution={256}
+              resolution={128}
               environmentIntensity={0.8}
               //background
-              environmentRotation={
-                new THREE.Euler(
-                  THREE.MathUtils.degToRad(0),
-                  THREE.MathUtils.degToRad(0),
-                  THREE.MathUtils.degToRad(2),
-                  'YZX'
-                )
-              }
-              backgroundRotation={
-                new THREE.Euler(
-                  /* THREE.MathUtils.degToRad(0),
-                  THREE.MathUtils.degToRad(20),
-                  THREE.MathUtils.degToRad(-2),*/
-                  THREE.MathUtils.degToRad(-5),
-                  THREE.MathUtils.degToRad(64),
-                  THREE.MathUtils.degToRad(-5),
-                  'YZX'
-                )
-              }
+              environmentRotation={ENV_ROTATION}
+              backgroundRotation={BG_ROTATION}
             />
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
               <CompoundCollider />
@@ -142,4 +142,19 @@ function App() {
   )
 }
 
+/*function ShaderDebug() {
+  const gl = useThree((state) => state.gl)
+
+  useEffect(() => {
+    // espera un poco para dar tiempo a que TODO termine de montar y compilar
+    const id = setTimeout(() => {
+      console.log('Programas de shader compilados:', gl.info.programs?.length)
+      console.log('Detalle:', gl.info.programs)
+    }, 3000) // ajusta este delay a más o menos lo que tarda tu carga completa
+
+    return () => clearTimeout(id)
+  }, [gl])
+
+  return null
+}*/
 export default App
