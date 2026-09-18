@@ -9,9 +9,9 @@ const TIER_RESOLUTION_FACTOR: Record<Tier, number> = {
 //depends on gpu capabilities
 export const TIER_SETTINGS = {
   low: { samples: 1, useTransmission: false },
-  mid: { samples: 4, useTransmission: true },
-  high: { samples: 4, useTransmission: true },
-  ultra: { samples: 4, useTransmission: true },
+  mid: { samples: 3, useTransmission: true },
+  high: { samples: 3, useTransmission: true },
+  ultra: { samples: 3, useTransmission: true },
 }
 const MAX_RESOLUTION_CAP = 2048
 const MIN_RESOLUTION_FLOOR = 630
