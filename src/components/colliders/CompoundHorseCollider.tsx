@@ -3,17 +3,19 @@ import { useGLTF, useTexture } from '@react-three/drei'
 import { RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-const WAVE_CONFIG = [
-  { amplitude: 0.033, speed: 1.75 },
-  { amplitude: 0.041, speed: 1.65 },
-  { amplitude: 0.027, speed: 1.44 },
-  { amplitude: 0.0357, speed: 1.38 },
-  { amplitude: 0.0245, speed: 1.1 },
-]
-
+const WAVES = [
+  { name: 'w1', colliderName: 'convex1', amplitude: 0.033, speed: 1.75 },
+  { name: 'w2', colliderName: 'convex2', amplitude: 0.041, speed: 1.65 },
+  { name: 'w3', colliderName: 'collider3', amplitude: 0.027, speed: 1.44 },
+  { name: 'w4', colliderName: 'convex4', amplitude: 0.0357, speed: 1.38 },
+  { name: 'w5', colliderName: 'conex5', amplitude: 0.0245, speed: 1.1 },
+] as const
+const STATIC_MESH_NAME = 'w6' as const // horse as fixed
 const PHASE_STEP = (Math.PI * 2) / 5
-const WAVE_NAMES = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6'] as const // convex1, convex2, collider3, convex4, conex5
-
+const getWaveY = (baseLimitY: number, wave: (typeof WAVES)[number], i: number, time: number) => {
+  const { amplitude, speed } = wave
+  return baseLimitY + (Math.sin(time * speed + i * PHASE_STEP) - 1) * amplitude - 1.5
+}
 export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<boolean> }) {
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const { nodes: visualNodes } = useGLTF('/modelos/horses.glb')
@@ -31,9 +33,10 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
   }, [lightMap])
 
   // Clona y prepara cada mesh visual UNA sola vez
+  const ALL_MESH_NAMES = [...WAVES.map(({ name }) => name), STATIC_MESH_NAME] as const
   const preparedVisual = useMemo(() => {
     const result: Record<string, THREE.Mesh> = {}
-    WAVE_NAMES.forEach((name) => {
+    ALL_MESH_NAMES.forEach((name) => {
       const original = visualNodes[name] as THREE.Mesh
       const mesh = original.clone()
       const mat = (
@@ -55,13 +58,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
   const visualRefs = useRef<(THREE.Group | null)[]>([])
   const localTime = useRef(0)
 
-  const colliderWaveNodes = [
-    colliderNodes.convex1,
-    colliderNodes.convex2,
-    colliderNodes.collider3,
-    colliderNodes.convex4,
-    colliderNodes.conex5,
-  ]
+  const colliderWaveNodes = WAVES.map((w) => colliderNodes[w.colliderName])
 
   const baseLimitY = colliderWaveNodes.map((n) => n.position.y)
   useEffect(() => {
@@ -83,9 +80,8 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
     localTime.current += safeDelta
     const time = localTime.current
 
-    for (let i = 0; i < WAVE_CONFIG.length; i++) {
-      const { amplitude, speed } = WAVE_CONFIG[i]
-      const y = baseLimitY[i] + (Math.sin(time * speed + i * PHASE_STEP) - 1) * amplitude - 1.5
+    for (let i = 0; i < WAVES.length; i++) {
+      const y = getWaveY(baseLimitY[i], WAVES[i], i, time)
 
       rigidRefs.current[i]?.setNextKinematicTranslation({ x: 0, y, z: 0 })
 
@@ -127,31 +123,39 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
           castShadow={false} // opcional, ya es false por defecto
         />
       }
-      {colliderWaveNodes.map((node, i) => (
-        <RigidBody
-          key={`collider-${i}`}
-          ref={(el) => {
-            rigidRefs.current[i] = el
-          }}
-          colliders="hull"
-          rotation={[0, -0, 0]}
-          type="kinematicPosition"
-        >
-          <primitive object={node} />
-        </RigidBody>
-      ))}
+      {WAVES.map((wave, i) => {
+        const y = getWaveY(baseLimitY[i], wave, i, 0)
+        return (
+          <RigidBody
+            key={`collider-${wave.name}`}
+            ref={(el) => {
+              rigidRefs.current[i] = el
+            }}
+            colliders="hull"
+            rotation={[0, -0, 0]}
+            position={[0, y, 0]}
+            type="kinematicPosition"
+          >
+            <primitive object={colliderWaveNodes[i]} />
+          </RigidBody>
+        )
+      })}
       <RigidBody type="fixed" colliders="hull" position={[0, -1.5, 0]}>
         <primitive object={colliderNodes.fixed} /*position={[0, -5.5, 0]} */ />
       </RigidBody>
-      {WAVE_NAMES.map((name, i) => (
-        <group
-          key={`visual-${name}`}
-          ref={(el) => (visualRefs.current[i] = el)}
-          rotation={[0, 0, 0]}
-        >
-          <primitive object={preparedVisual[name]} />
-        </group>
-      ))}
+      {WAVES.map((wave, i) => {
+        const y = getWaveY(baseLimitY[i], wave, i, 0)
+        return (
+          <group
+            key={`visual-${wave.name}`}
+            ref={(el) => (visualRefs.current[i] = el)}
+            rotation={[0, 0, 0]}
+            position={[0, y, 0]}
+          >
+            <primitive object={preparedVisual[wave.name]} />
+          </group>
+        )
+      })}
       <primitive object={preparedVisual.w6} position={[-0.334, -1.475, 0.025]} />
     </group>
   )
