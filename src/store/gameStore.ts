@@ -15,6 +15,7 @@ interface GameStore {
   tier: Tier
   dpr: number
   playerName: string
+  isSceneReady: boolean
   // actions
   setPlayerName: (name: string) => void
   registerFloatingBody: (body: RapierRigidBody) => void
@@ -24,6 +25,7 @@ interface GameStore {
   setWaterActive: (active: boolean) => void
   downgrade: () => void
   upgrade: () => void
+  setIsSceneReady: () => void
 }
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -37,7 +39,8 @@ export const useGameStore = create<GameStore>((set) => ({
   dpr: 1.5,
   //custom player namme
   playerName: '@IvanRice_',
-
+  //loader
+  isSceneReady: false,
   // actions
   setPlayerName: (name) => set({ playerName: name }),
   registerFloatingBody: (body) =>
@@ -73,4 +76,6 @@ export const useGameStore = create<GameStore>((set) => ({
         dpr: window.devicePixelRatio > 1 ? 2 : 1,
       }
     }),
+  // loader
+  setIsSceneReady: () => set({ isSceneReady: true }),
 }))
