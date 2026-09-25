@@ -11,6 +11,7 @@ import { useGameStore } from './store/gameStore'
 import { getTierSettings } from './utils/optimizationInitilizer'
 import { OverlayInstructions } from './components/OverlayInstructions'
 import { LoadingOverlay } from './components/LoadingOverlay'
+import ScoreRings from './components/ScoreRings'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -76,33 +77,15 @@ function App() {
   const settings = useMemo(() => getTierSettings(dpr)[tier], [tier, dpr])
   const { resolution, samples, useTransmission } = settings
   return (
-    <main className="grid h-screen w-screen overflow-hidden">
+    <main className="min-h-dhv grid h-screen w-dvw overflow-hidden">
       <LoadingOverlay />
       <header className="flex justify-center">
         <h5>
           Iron Sea Rings resolution: {resolution}, samples: {samples}, tier: {tier}
           {useTransmission}
+          <ScoreRings />
         </h5>
         <OverlayInstructions />
-        <div
-          style={{
-            position: 'fixed',
-            top: 60,
-            right: 0,
-            background: '#000',
-            color: '#fff',
-            fontFamily: 'monospace',
-            fontSize: 11,
-            padding: '4px 8px',
-            zIndex: 100,
-          }}
-        >
-          {/*Object.entries(metrics).map(([k, v]) => (
-            <div key={k}>
-              {k}: {v}
-            </div>
-          ))*/}
-        </div>
       </header>
       <div className="relative">
         <Canvas
