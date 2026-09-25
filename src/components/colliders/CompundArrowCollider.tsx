@@ -62,7 +62,7 @@ export default function CompundArrowCollider() {
     <>
       <Instances geometry={geometries.post} material={material} limit={3} frustumCulled={false}>
         <ArrowCollider position={[-0.325, -1.615, -0]} postIndex={0} />
-        <ArrowCollider position={[0, -1.5, 0]} postIndex={1.5} />
+        <ArrowCollider position={[0, -1.5, 0]} postIndex={1} />
         <ArrowCollider position={[0.325, -1.615, 0]} postIndex={2} />
       </Instances>
     </>
