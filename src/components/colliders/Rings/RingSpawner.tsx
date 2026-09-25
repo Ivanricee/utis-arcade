@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { CompoundTorusRingCollider } from './CompoundTorusRingCollider'
 import type { RapierRigidBody } from '@react-three/rapier'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
+import { useGameStore } from '../../../store/gameStore'
 /*import { POLE_CONFIGS } from '../../../hooks/useRingPoleAssist'
 
 const COLLIDER_PARENT_POSITION = new THREE.Vector3(0, -1.5, 0)
@@ -84,6 +85,7 @@ export function RingSpawner({
   friction = 0.5,
 }: RingSpawnerProps) {
   const { geometries } = usePlasticMeshes()
+  const resetRings = useGameStore((state) => state.resetRings)
   const rigidBodyRefs = useRef<RapierRigidBody[]>([] as RapierRigidBody[])
   const mesh = geometries.ring
 
@@ -99,6 +101,12 @@ export function RingSpawner({
 
     [basePosition, diameter, ringsPerStack, stackSpacing]
   )
+
+  useEffect(() => {
+    //initlize total count of rings
+    resetRings(allPositions.length)
+  }, [allPositions.length, resetKey, resetRings])
+
   // Visibility state of each ring — start all hidden
   const [visibleRings, setVisibleRings] = useState<boolean[]>(() =>
     new Array(allPositions.length).fill(false)
