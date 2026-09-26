@@ -1,14 +1,13 @@
 import { Environment, OrbitControls, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import DprManager from './components/DprManager'
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 //import { RenderMetrics } from './components/RenderMetrics'
 import CompoundCollider from './components/colliders/CompounCollider'
 import { ConsoleGame } from './components/ConsoleGame'
 import * as THREE from 'three'
 import { BackgroundOnly } from './components/BackgroundOnly'
 import { useGameStore } from './store/gameStore'
-import { getTierSettings } from './utils/optimizationInitilizer'
 import { OverlayInstructions } from './components/OverlayInstructions'
 import { LoadingOverlay } from './components/LoadingOverlay'
 import ScoreRings from './components/ScoreRings'
@@ -66,27 +65,18 @@ function App() {
     shaders?: number
     vertices?: number
   }>({})*/
-  const tier = useGameStore((state) => state.tier)
-  const dpr = useGameStore((state) => state.dpr)
-
   const [showHeavyContent, setShowHeavyContent] = useState(false)
   useEffect(() => {
     const id = requestAnimationFrame(() => setShowHeavyContent(true))
     return () => cancelAnimationFrame(id)
   }, [])
-  const settings = useMemo(() => getTierSettings(dpr)[tier], [tier, dpr])
-  const { resolution, samples, useTransmission } = settings
   return (
     <main className="min-h-dhv grid h-screen w-dvw overflow-hidden">
       <LoadingOverlay />
-      <header className="flex justify-center">
-        <h5>
-          Iron Sea Rings resolution: {resolution}, samples: {samples}, tier: {tier}
-          {useTransmission}
-          <ScoreRings />
-        </h5>
-        <OverlayInstructions />
+      <header className="pointer-events-none absolute inset-x-0 top-2 z-10 flex justify-center px-4">
+        <ScoreRings />
       </header>
+      <OverlayInstructions />
       <div className="relative">
         <Canvas
           onCreated={(state) => {
@@ -110,7 +100,7 @@ function App() {
               <>
                 <ReadySignal />
 
-                <PerspectiveCamera makeDefault position={[0, 0, 2.5]} fov={60} />
+                <PerspectiveCamera makeDefault position={[0.05, -0.3, 2.5]} fov={68} />
                 {/**
             new THREE.Euler(
               THREE.MathUtils.degToRad(278),
