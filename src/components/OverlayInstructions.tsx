@@ -49,11 +49,11 @@ export function OverlayInstructions() {
             type="button"
             onClick={handleClose}
             aria-label="Close"
-            className="absolute -top-2 -right-2 grid size-8 place-items-center rounded-full border border-cyan-200/60 bg-blue-700/40 pb-[8px] text-2xl leading-none text-cyan-100 transition-all transition-colors hover:bg-cyan-200/20 hover:text-white hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-100 sm:top-4 sm:right-4"
+            className="absolute -top-2 -right-2 grid size-8 place-items-center rounded-full border border-cyan-200/60 bg-blue-700/90 pb-[3px] text-2xl leading-none text-cyan-100 transition-all transition-colors hover:bg-cyan-200/20 hover:text-white hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-100 sm:top-4 sm:right-4 sm:bg-blue-700/40"
           >
             ×
           </button>
-          <h1 className="mt-0! !text-3xl !font-bold !text-cyan-100 sm:text-4xl!">UTIS RING TOSS</h1>
+          <h1 className="mt-0! text-3xl! font-bold! text-cyan-100! sm:text-4xl!">UTIS RING TOSS</h1>
           <div className="h-0.5 w-full rounded-sm bg-cyan-100/10"></div>
           <label className="text-sm text-blue-200/90">Player Name</label>
           <input
@@ -84,7 +84,7 @@ export function OverlayInstructions() {
           type="button"
           onClick={handleOpen}
           aria-label="Open menu"
-          className="absolute top-2 right-2 z-20 grid size-11 place-items-center rounded-xl border border-cyan-200/70 bg-[#05224d]/90 text-2xl text-cyan-100 shadow-lg shadow-cyan-400/30 transition-all duration-200 hover:scale-105 hover:border-cyan-100 hover:bg-[#175680] hover:text-white hover:shadow-cyan-300/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-100 active:scale-95 sm:top-4 sm:right-4"
+          className="absolute top-2 right-2 z-20 grid size-9 place-items-center rounded-xl border border-cyan-200/70 bg-[#05224d]/90 text-xl text-cyan-100 shadow-lg shadow-cyan-400/30 transition-all duration-200 hover:scale-105 hover:border-cyan-100 hover:bg-[#175680] hover:text-white hover:shadow-cyan-300/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-100 active:scale-95 sm:right-4"
         >
           <span aria-hidden="true">☰</span>
         </button>
