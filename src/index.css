@@ -118,3 +118,46 @@ body,
   overflow: hidden;
   touch-action: none; /* evita scroll en móvil */
 }
+
+@keyframes win-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 26px rgba(250, 204, 21, 0.8);
+  }
+}
+
+@keyframes win-ring-pulse {
+  from {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5));
+  }
+  to {
+    transform: translateY(-3px) scale(1.18);
+    filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.95));
+  }
+}
+
+.win-celebration {
+  border-color: rgb(250 204 21 / 85%);
+  animation: win-pulse 1s ease-in-out infinite;
+}
+
+.win-rings svg {
+  animation: win-ring-pulse 650ms ease-in-out infinite alternate;
+}
+
+.win-rings svg:nth-child(even) {
+  animation-delay: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .win-celebration,
+  .win-rings svg {
+    animation: none;
+  }
+}
