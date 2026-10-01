@@ -10,6 +10,7 @@ import {
   type CollisionPayload,
 } from '@react-three/rapier'
 import usePlasticMeshes from '../../../hooks/usePlasticMeshes'
+import { useRingCollisionSound } from '../../../hooks/useRingCollisionSound'
 import { useGameStore } from '../../../store/gameStore'
 
 interface TorusRingColliderProps {
@@ -96,6 +97,7 @@ export function CompoundTorusRingCollider({
   const stableUserData = useRef<RigidBodyUserData>({ ringIndex, isInsidePost: false })
 
   const { geometries } = usePlasticMeshes()
+  const handleCollisionEnter = useRingCollisionSound()
   const mesh = geometries.ring
   if (!mesh) return null
 
@@ -161,6 +163,7 @@ export function CompoundTorusRingCollider({
       colliders={false}
       restitution={restitution}
       friction={friction}
+      onCollisionEnter={handleCollisionEnter}
     >
       {spherePositions.map((sphere, i) => (
         <BallCollider
