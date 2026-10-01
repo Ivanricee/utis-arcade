@@ -68,7 +68,12 @@ function generateStackPositions(
       ])
     }
   }
-
+  //add one more ring
+  positions.push([
+    basePosition.x - 0.305,
+    basePosition.y - ringsPerStack * stackSpacing + 2.55,
+    basePosition.z + stackOffsets[2] - 0.000645,
+  ])
   return positions
 }
 
@@ -79,7 +84,7 @@ export function RingSpawner({
   stackSpacing = 0,
   spawnDelay = 600,
   resetKey = 0,
-  sphereCount = 12,
+  sphereCount = 10,
   overlapFactor = 0.9,
   restitution = 0.2, //rebote
   friction = 0.5,

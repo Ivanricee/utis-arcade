@@ -10,7 +10,7 @@ export default function Rings() {
     <>
       <RingSpawner
         onRefsReady={setRigidBodyRefs}
-        ringsPerStack={3}
+        ringsPerStack={2}
         stackSpacing={0.12}
         spawnDelay={800}
         onPositionsReady={setRingPositions}
