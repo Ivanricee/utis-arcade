@@ -12,13 +12,13 @@ interface RingStandInProps {
 
 const DEFAULT_COLORS = [
   '#54f30a',
-  '#24f783',
-  '#ff4ca0',
-  '#6572ec',
-  '#85c72e',
-  '#f3e8f0',
-  '#8f2f1a',
   '#beff45',
+  '#ff4ca0',
+  '#f3e8f0',
+  '#6572ec',
+  '#24f783',
+  '#8f2f1a',
+  '#85c72e',
   '#64a56d',
 ]
 
