@@ -126,7 +126,7 @@ body,
     box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
   }
   50% {
-    transform: scale(1.06);
+    transform: scale(1.03);
     box-shadow: 0 0 26px rgba(250, 204, 21, 0.8);
   }
 }

@@ -3,6 +3,7 @@ import { useGLTF, useTexture } from '@react-three/drei'
 import { RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { WinPulseManager } from '../WinPulseManager'
 const WAVES = [
   { name: 'w1', colliderName: 'convex1', amplitude: 0.033, speed: 1.75 },
   { name: 'w2', colliderName: 'convex2', amplitude: 0.041, speed: 1.65 },
@@ -20,8 +21,6 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
   const { nodes: colliderNodes } = useGLTF('/modelos/ConvexMesh.glb')
   const { nodes: visualNodes } = useGLTF('/modelos/horses.glb')
   const lightMap = useTexture('/modelos/textures/horses/lightmap_horses_.webp')
-  //const lightRef = useRef(null)
-  //useHelper(lightRef, THREE.PointLightHelper, 0.1, 'red') // tamaño, color
   useEffect(() => {
     lightMap.colorSpace = THREE.LinearSRGBColorSpace
     lightMap.flipY = false
@@ -56,8 +55,8 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
 
   const rigidRefs = useRef<(RapierRigidBody | null)[]>([])
   const visualRefs = useRef<(THREE.Group | null)[]>([])
+  const lightRefs = useRef<(THREE.PointLight | null)[]>([])
   const localTime = useRef(0)
-
   const colliderWaveNodes = WAVES.map((w) => colliderNodes[w.colliderName])
 
   const baseLimitY = colliderWaveNodes.map((n) => n.position.y)
@@ -104,7 +103,9 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       }
       {
         <pointLight
-          // ref={lightRef}
+          ref={(light) => {
+            lightRefs.current[1] = light
+          }}
           position={[-0.2, 0.15, -0.15]}
           intensity={10}
           distance={1.4}
@@ -115,6 +116,9 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
       }
       {
         <pointLight
+          ref={(light) => {
+            lightRefs.current[2] = light
+          }}
           position={[-0.55, 0.6, -0.05]}
           intensity={10}
           distance={1.4}
@@ -123,6 +127,7 @@ export default function CompoundHorse({ isPaused }: { isPaused: React.RefObject<
           castShadow={false} // opcional, ya es false por defecto
         />
       }
+      <WinPulseManager lights={lightRefs.current} materials={[]} />
       {WAVES.map((wave, i) => {
         const y = getWaveY(baseLimitY[i], wave, i, 0)
         return (

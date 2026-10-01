@@ -13,6 +13,7 @@ import {
 } from '../utils'
 import * as THREE from 'three'
 import { useDrawTextPlayerName } from '../hooks/useDrawTextPlayerName'
+import { WinPulseManager } from './WinPulseManager'
 const BUTTON_NAME = 'base_button'
 export type canvasType = {
   canvas: HTMLCanvasElement
@@ -67,8 +68,10 @@ export function ConsoleGame() {
     }
   }, [scene])
   useDrawTextPlayerName({ imageRef, drawCanvasRef, textureRef })
+  const baseMaterial = getBaseMaterial(scene)
   return (
     <>
+      <WinPulseManager lights={[]} materials={baseMaterial ? [baseMaterial] : []} />
       <primitive object={scene} {...buttonHandlers} />
       {/*
       // debug:

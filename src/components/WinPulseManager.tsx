@@ -3,18 +3,21 @@ import { useRef } from 'react'
 import * as THREE from 'three'
 import { useWinCondition } from '../hooks/useWinCondition'
 
+const EMISSIVE_BASE_INTENSITY = 0.05
+const EMISSIVE_PULSE_AMOUNT = 2
+
 interface WinPulseManagerProps {
-  lights: (THREE.PointLight | null)[]
-  materials: THREE.MeshStandardMaterial[]
+  lights: (THREE.PointLight | null)[] | []
+  materials: THREE.MeshStandardMaterial[] | []
 }
 
-export function WinPulseManager({ lights, materials }: WinPulseManagerProps) {
+export function WinPulseManager({ lights = [], materials = [] }: WinPulseManagerProps) {
   const hasWon = useWinCondition()
   const initialLightIntensities = useRef(new Map<THREE.PointLight, number>())
   const initialMaterialValues = useRef(
     new Map<THREE.MeshStandardMaterial, { emissive: THREE.Color; intensity: number }>()
   )
-  const winEmissive = useRef(new THREE.Color('#ffe057'))
+  const winEmissive = useRef(new THREE.Color('#66ff00'))
 
   useFrame((state) => {
     for (const light of lights) {
@@ -39,10 +42,10 @@ export function WinPulseManager({ lights, materials }: WinPulseManagerProps) {
     for (const [material, initial] of initialMaterialValues.current) {
       if (hasWon) {
         material.emissive.copy(initial.emissive).lerp(winEmissive.current, pulse)
-        material.emissiveIntensity = initial.intensity + pulse * 4
+        material.emissiveIntensity = EMISSIVE_BASE_INTENSITY + pulse * EMISSIVE_PULSE_AMOUNT
       } else {
         material.emissive.copy(initial.emissive)
-        material.emissiveIntensity = initial.intensity
+        material.emissiveIntensity = EMISSIVE_BASE_INTENSITY
       }
     }
   })
