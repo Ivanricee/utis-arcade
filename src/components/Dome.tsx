@@ -72,7 +72,7 @@ export default function Dome() {
             ior={1.35}
             chromaticAberration={tier === 'mid' ? 0 : 0.5}
             anisotropy={4}
-            distortion={0.5}
+            distortion={tier === 'mid' ? 0.4 : 0.6}
             distortionScale={2}
             temporalDistortion={getTierValue(tier)}
             clearcoat={0.2}
