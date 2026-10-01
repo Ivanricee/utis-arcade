@@ -1,11 +1,13 @@
 import { useGameStore } from '../store/gameStore'
 import { useWinCondition } from '../hooks/useWinCondition'
+import { useWinSound } from '../hooks/useWinSound'
 import RingIndicator from './RingIndicator'
 
 export default function ScoreRings() {
   const totalRings = useGameStore((state) => state.rings.length)
   const score = useGameStore((state) => state.score)
   const hasWon = useWinCondition()
+  useWinSound(hasWon)
   const ringsLeft = Math.max(0, totalRings - score)
 
   return (
