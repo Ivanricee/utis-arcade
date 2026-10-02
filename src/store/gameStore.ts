@@ -10,6 +10,7 @@ interface RingState {
 interface GameStore {
   rings: RingState[]
   score: number
+  ringResetKey: number
   waterActive: boolean
   floatingBodies: RapierRigidBody[]
   tier: Tier
@@ -32,6 +33,7 @@ export const useGameStore = create<GameStore>((set) => ({
   // state
   rings: [],
   score: 0,
+  ringResetKey: 0,
   waterActive: false,
   floatingBodies: [],
   //optimizations state
@@ -59,7 +61,11 @@ export const useGameStore = create<GameStore>((set) => ({
       ringIndex: i,
       postIndex: null,
     }))
-    set({ rings, score: 0 })
+    set((state) => ({
+      rings,
+      score: 0,
+      ringResetKey: state.rings.length > 0 ? state.ringResetKey + 1 : state.ringResetKey,
+    }))
   },
   setWaterActive: (active) => set({ waterActive: active }),
   //  optimizations actions

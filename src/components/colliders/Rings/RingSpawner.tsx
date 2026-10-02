@@ -24,8 +24,6 @@ interface RingSpawnerProps {
   ringsPerStack?: number
   stackSpacing?: number
   spawnDelay?: number
-  /** forzar reset completo */
-  resetKey?: number
   sphereCount?: number
   overlapFactor?: number
   restitution?: number
@@ -83,7 +81,6 @@ export function RingSpawner({
   ringsPerStack = 4,
   stackSpacing = 0,
   spawnDelay = 600,
-  resetKey = 0,
   sphereCount = 10,
   overlapFactor = 0.9,
   restitution = 0.2, //rebote
@@ -91,7 +88,17 @@ export function RingSpawner({
 }: RingSpawnerProps) {
   const { geometries } = usePlasticMeshes()
   const resetRings = useGameStore((state) => state.resetRings)
+  const ringResetKey = useGameStore((state) => state.ringResetKey)
   const rigidBodyRefs = useRef<RapierRigidBody[]>([] as RapierRigidBody[])
+  const initialPoses = useRef<
+    Array<
+      | {
+          translation: { x: number; y: number; z: number }
+          rotation: { x: number; y: number; z: number; w: number }
+        }
+      | undefined
+    >
+  >([])
   const mesh = geometries.ring
 
   //  base y diámetro from geometry
@@ -110,7 +117,7 @@ export function RingSpawner({
   useEffect(() => {
     //initlize total count of rings
     resetRings(allPositions.length)
-  }, [allPositions.length, resetKey, resetRings])
+  }, [allPositions.length, resetRings])
 
   // Visibility state of each ring — start all hidden
   const [visibleRings, setVisibleRings] = useState<boolean[]>(() =>
@@ -118,14 +125,32 @@ export function RingSpawner({
   )
   const handleRigidBodyReady = (rb: RapierRigidBody, index: number) => {
     rigidBodyRefs.current[index] = rb
+    initialPoses.current[index] ??= {
+      translation: { ...rb.translation() },
+      rotation: { ...rb.rotation() },
+    }
     //notify
-    const totalRings = ringsPerStack * 3
-    if (rigidBodyRefs.current.filter(Boolean).length === totalRings) {
+    if (rigidBodyRefs.current.filter(Boolean).length === allPositions.length) {
       onRefsReady?.(rigidBodyRefs.current)
     }
   }
 
-  // Each time resetKey changes or component mounts,
+  useEffect(() => {
+    if (ringResetKey === 0) return
+
+    rigidBodyRefs.current.forEach((rigidBody, index) => {
+      const initialPose = initialPoses.current[index]
+      if (!rigidBody || !initialPose) return
+
+      rigidBody.setTranslation(initialPose.translation, true)
+      rigidBody.setRotation(initialPose.rotation, true)
+      rigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true)
+      rigidBody.setAngvel({ x: 0, y: 0, z: 0 }, true)
+      rigidBody.wakeUp()
+    })
+  }, [ringResetKey])
+
+  // On mount, reset visibility and start the spawn delay.
   // reset visibility and start the spawn delay
   useEffect(() => {
     setVisibleRings(new Array(allPositions.length).fill(false))
@@ -149,7 +174,7 @@ export function RingSpawner({
     })
 
     return () => timeouts.forEach(clearTimeout)
-  }, [resetKey, allPositions.length, ringsPerStack, spawnDelay])
+  }, [allPositions.length, ringsPerStack, spawnDelay])
   useEffect(() => {
     if (onPositionsReady) onPositionsReady(allPositions)
   }, [allPositions])
@@ -160,7 +185,7 @@ export function RingSpawner({
         visibleRings[i] ? (
           <CompoundTorusRingCollider
             ringIndex={i}
-            key={`ring-${resetKey}-${i}`}
+            key={`ring-${i}`}
             position={position}
             sphereCount={sphereCount}
             overlapFactor={overlapFactor}
