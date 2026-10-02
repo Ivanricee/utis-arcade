@@ -66,6 +66,7 @@ function App() {
     vertices?: number
   }>({})*/
   const [showHeavyContent, setShowHeavyContent] = useState(false)
+  const [showStats, setShowStats] = useState(false)
   useEffect(() => {
     const id = requestAnimationFrame(() => setShowHeavyContent(true))
     return () => cancelAnimationFrame(id)
@@ -73,6 +74,9 @@ function App() {
   return (
     <main className="min-h-dhv grid h-screen w-dvw overflow-hidden">
       <LoadingOverlay />
+      <div className="absolute top-0 left-1 z-10 text-xs">
+        <button onClick={() => setShowStats((s) => !s)}>Stats {showStats ? '▲' : '▼'}</button>
+      </div>
       <header className="pointer-events-none absolute inset-x-0 top-2 z-10 flex justify-center px-4">
         <ScoreRings />
       </header>
@@ -111,8 +115,8 @@ function App() {
             <RenderMetrics onUpdate={setMetrics} />
              */}
 
-                <Stats showPanel={0} />
-                <Stats showPanel={2} className="stats-memory" />
+                {showStats && <Stats className="top-4!" />}
+
                 <DprManager />
                 <BackgroundOnly imageUrl="/modelos/equirect-background2.webp" />
 
