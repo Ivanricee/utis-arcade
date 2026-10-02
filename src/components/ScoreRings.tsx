@@ -17,13 +17,13 @@ export default function ScoreRings() {
       aria-atomic="true"
       aria-label={
         hasWon
-          ? `You win! All ${totalRings} rings scored`
+          ? `GAME COMPLETE! All ${totalRings} rings scored`
           : `${ringsLeft} rings left; ${score} of ${totalRings} rings scored`
       }
       className={`flex max-w-[min(90vw,18rem)] flex-col items-center gap-0.5 rounded-lg border border-cyan-200/45 bg-[#05224d]/85 px-2 py-2 shadow-lg shadow-cyan-950/25 backdrop-blur-sm ${hasWon ? 'win-celebration' : ''}`}
     >
       <span aria-hidden="true" className="text-xs font-semibold text-cyan-100">
-        {hasWon ? 'YOU WIN!' : 'RINGS LEFT'}
+        {hasWon ? 'GAME COMPLETE!' : 'RINGS LEFT'}
       </span>
       <span
         aria-hidden="true"
