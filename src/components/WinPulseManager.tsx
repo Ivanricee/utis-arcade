@@ -45,7 +45,7 @@ export function WinPulseManager({ lights = [], materials = [] }: WinPulseManager
         material.emissiveIntensity = EMISSIVE_BASE_INTENSITY + pulse * EMISSIVE_PULSE_AMOUNT
       } else {
         material.emissive.copy(initial.emissive)
-        material.emissiveIntensity = EMISSIVE_BASE_INTENSITY
+        material.emissiveIntensity = initial.intensity
       }
     }
   })
