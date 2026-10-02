@@ -122,9 +122,9 @@ export function CompoundTorusRingCollider({
     const strength = 0.0035
     rb.applyImpulse(
       {
-        x: (Math.random() - 0.5) * strength,
+        x: (Math.random() - 0.3) * strength,
         y: (Math.random() - 0.5) * strength,
-        z: (Math.random() - 0.5) * strength,
+        z: (Math.random() - 0.4) * strength,
       },
       true
     )
