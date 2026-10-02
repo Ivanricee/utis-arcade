@@ -10,7 +10,7 @@ const ACTIVATION_HEIGHT_MARGIN = 1
 const ROTATION_IMPULSE_STRENGTH = 0.0000018
 const STICK_POS = ARROW_DATA.stick.position
 const STICK_SCALE = ARROW_DATA.stick.scale
-const ARROW_ROTATION_Y = 1.6
+const ARROW_ROTATION_Y = 1.59
 const ARROW_POSITIONS: [number, number, number][] = [
   [-0.375, -1.615, -0.965],
   [-0.05, -1.5, -0.965],
