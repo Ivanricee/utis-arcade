@@ -16,7 +16,7 @@ export function OctoField() {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const rigidBodyRefs = useRef<(RapierRigidBody | null)[]>([])
 
-  const instances = useMemo(() => generateOctoInstances({ left: 1, central: 4, right: 1 }), [])
+  const instances = useMemo(() => generateOctoInstances({ left: 1, central: 3, right: 1 }), [])
   const octoCount = instances.length
   const pivotOffset = useMemo(() => new THREE.Vector3(-0.28, 1.4, -0.03), [])
   const _offset = new THREE.Vector3()
