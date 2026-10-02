@@ -21,7 +21,7 @@ export function LoadingOverlay() {
         fontFamily: 'monospace',
       }}
     >
-      {active ? `Cargando... ${progress.toFixed(0)}%` : 'Preparando escena...'}
+      {active ? `Loading... ${progress.toFixed(0)}%` : 'Preparing your game......'}
     </div>
   )
 }
