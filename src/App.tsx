@@ -1,4 +1,4 @@
-import { Environment, OrbitControls, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
+import { Environment, PerspectiveCamera, Stats, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import DprManager from './components/DprManager'
 import { Suspense, useEffect, useRef, useState } from 'react'
@@ -11,6 +11,7 @@ import { useGameStore } from './store/gameStore'
 import { OverlayInstructions } from './components/OverlayInstructions'
 import { LoadingOverlay } from './components/LoadingOverlay'
 import ScoreRings from './components/ScoreRings'
+import { Controls } from './components/Controls'
 /*function Model() {
   const gltf = useGLTF('/modelos/Untitled.glb')
   return <primitive object={gltf.scene} scale={1} position={[0, 0, 0]} />
@@ -65,6 +66,7 @@ function App() {
     shaders?: number
     vertices?: number
   }>({})*/
+  const sceneRef = useRef<THREE.Group>(null)
   const [showHeavyContent, setShowHeavyContent] = useState(false)
   const [showStats, setShowStats] = useState(false)
   useEffect(() => {
@@ -97,21 +99,15 @@ function App() {
             toneMapping: THREE.CustomToneMapping,
             toneMappingExposure: 1.2,
           }}
-          camera={{ position: [0, 0, 0], rotation: [0, 0, 10] }}
+          camera={{ position: [0, 0, 0], rotation: [0, 0, 0] }}
         >
           <Suspense fallback={null}>
             {showHeavyContent && (
               <>
                 <ReadySignal />
 
-                <PerspectiveCamera makeDefault position={[0.05, -0.3, 2.5]} fov={68} />
+                <PerspectiveCamera makeDefault fov={68} />
                 {/**
-            new THREE.Euler(
-              THREE.MathUtils.degToRad(278),
-              THREE.MathUtils.degToRad(67),
-              THREE.MathUtils.degToRad(-15),
-              'YZX'
-            )
             <RenderMetrics onUpdate={setMetrics} />
              */}
 
@@ -128,24 +124,17 @@ function App() {
                   environmentRotation={ENV_ROTATION}
                   backgroundRotation={BG_ROTATION}
                 />
-                <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
-                  <CompoundCollider />
+                <group ref={sceneRef}>
+                  <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
+                    <CompoundCollider />
+                  </group>
+
+                  <group rotation={[0, -1.5, 0]} position={[0, -1.5, 0]}>
+                    <ConsoleGame />
+                  </group>
                 </group>
 
-                <group rotation={[0, -1.5, 0]} position={[0, -1.5, 0]}>
-                  <ConsoleGame />
-                </group>
-
-                <OrbitControls
-                  enableDamping
-                  // enablePan={false}
-                  minDistance={1.75}
-                  maxDistance={7}
-                  minAzimuthAngle={THREE.MathUtils.degToRad(-90)} // izquierda
-                  maxAzimuthAngle={THREE.MathUtils.degToRad(100)} // derecha
-                  minPolarAngle={THREE.MathUtils.degToRad(20)} // arriba
-                  maxPolarAngle={THREE.MathUtils.degToRad(120)} // abajo
-                />
+                <Controls sceneRef={sceneRef} />
               </>
             )}
           </Suspense>
