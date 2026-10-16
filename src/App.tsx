@@ -140,6 +140,14 @@ function App() {
           </Suspense>
         </Canvas>
       </div>
+      <section className="absolute bottom-1 flex w-full justify-center text-[0.6rem] sm:text-xs">
+        <div>
+          Inspired by Keane & Sanna Annukka · Made with 💙 by{' '}
+          <a href="https://www.instagram.com/ivanrice_/">
+            <strong>@Ivanrice_</strong>
+          </a>
+        </div>
+      </section>
     </main>
   )
 }
